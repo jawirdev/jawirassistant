@@ -1,0 +1,590 @@
+/* Import Font (Opsional, tapi disarankan untuk gaya elegan) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+
+/* ==================
+   VARIABEL WARNA
+   ================== */
+:root {
+    /* Mode Terang (Default) */
+    --bg-color: #ffffff;
+    --text-color: #1a1a1a;
+    --primary-color: #007aff; /* Biru cerah */
+    --secondary-color: #f2f2f7; /* Abu-abu sangat muda */
+    --border-color: #e0e0e0;
+    --neon-glow: rgba(0, 122, 255, 0.5); /* Efek glow untuk mode terang */
+
+    /* Variabel untuk efek cahaya kursor */
+    --cursor-light-color: rgba(0, 122, 255, 0.1);
+}
+
+body.dark-mode {
+    /* Mode Gelap */
+    --bg-color: #0d1a2e; /* Biru sangat gelap */
+    --text-color: #e0e9f5;
+    --primary-color: #00bfff; /* Biru Neon/Muda */
+    --secondary-color: #1a2940; /* Biru gelap (untuk kotak) */
+    --border-color: #2a3f5a;
+    --neon-glow: rgba(0, 191, 255, 0.7); /* Efek glow untuk mode gelap */
+
+    /* Variabel untuk efek cahaya kursor */
+    --cursor-light-color: rgba(0, 191, 255, 0.08);
+}
+
+/* ==================
+   GAYA DASAR & RESET
+   ================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.4s ease, color 0.4s ease;
+    overflow-x: hidden; /* Mencegah scroll horizontal */
+    line-height: 1.6;
+}
+
+main {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+/* ==================
+   EFEK VISUAL
+   ================== */
+
+/* Efek Cahaya Kursor */
+.cursor-light {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 600px; /* Ukuran area cahaya */
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--cursor-light-color) 0%, transparent 70%);
+    pointer-events: none; /* Agar tidak menghalangi klik */
+    transform: translate(-50%, -50%); /* Posisi awal di tengah */
+    z-index: 1;
+    transition: transform 0.1s ease-out; /* Animasi mengikuti kursor */
+}
+
+/* Efek Partikel */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* Membuat partikel (Pure CSS) */
+.particles::before,
+.particles::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle, var(--primary-color) 1px, transparent 1px),
+        radial-gradient(circle, var(--primary-color) 1px, transparent 1px);
+    background-size: 40px 40px, 80px 80px;
+    background-position: 0 0, 40px 40px;
+    opacity: 0.1;
+    animation: rise 60s linear infinite;
+}
+
+.particles::after {
+    animation: rise 30s linear infinite reverse; /* Arah berlawanan */
+    opacity: 0.05;
+}
+
+@keyframes rise {
+    from {
+        transform: translateY(100vh);
+    }
+    to {
+        transform: translateY(-100vh);
+    }
+}
+
+
+/* ==================
+   TOMBOL & KONTROL
+   ================== */
+
+/* Tombol Mode Gelap/Terang */
+#theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    color: var(--primary-color);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#theme-toggle:hover {
+    box-shadow: 0 0 20px var(--neon-glow);
+    transform: scale(1.1);
+}
+
+/* Sembunyikan ikon yang tidak aktif */
+.dark-mode #theme-toggle .bi-brightness-high-fill { display: none; }
+body:not(.dark-mode) #theme-toggle .bi-moon-stars-fill { display: none; }
+
+
+/* Tombol Umum */
+.btn {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    font-weight: 500;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover, .btn:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px var(--neon-glow);
+}
+
+.btn:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 10px var(--neon-glow);
+}
+
+/* ==================
+   SISTEM HALAMAN
+   ================== */
+.page {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    /* Sembunyikan halaman */
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeOut 0.4s ease forwards;
+}
+
+.page.active {
+    /* Tampilkan halaman aktif */
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+        display: none;
+    }
+}
+
+.content {
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--text-color);
+}
+
+h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--primary-color);
+    text-align: left;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* ==================
+   HALAMAN 1: HOME
+   ================== */
+.device-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 30px;
+    text-align: left;
+}
+
+.info-box {
+    background: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.info-box i {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin-bottom: 12px;
+}
+
+.info-box strong {
+    font-size: 14px;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-bottom: 4px;
+}
+
+.info-box span {
+    font-size: 16px;
+    font-weight: 500;
+    word-wrap: break-word;
+}
+
+/* ==================
+   HALAMAN 2: MENU
+   ================== */
+.menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+.menu-item {
+    background: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.menu-item.disabled {
+    opacity: 0.6;
+}
+
+.menu-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px var(--neon-glow);
+}
+
+.menu-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.menu-header i {
+    font-size: 24px;
+    color: var(--primary-color);
+}
+
+.menu-header h3 {
+    flex-grow: 1;
+    font-size: 1.25rem;
+}
+
+.btn-coba {
+    background: var(--primary-color);
+    color: var(--bg-color);
+    font-size: 14px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-coba:hover {
+    transform: scale(1.05);
+}
+
+.btn-coba:disabled {
+    background: #888;
+    cursor: not-allowed;
+}
+
+.menu-description {
+    margin-top: 12px;
+    margin-left: 36px; /* Sejajar dengan teks judul */
+    font-size: 15px;
+    opacity: 0.8;
+    /* Sembunyikan deskripsi */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, margin-top 0.4s ease-out;
+}
+
+/* Tampilkan deskripsi saat menu-item di-klik (via JS) */
+.menu-item.active .menu-description {
+    max-height: 100px; /* Sesuaikan jika perlu */
+    margin-top: 12px;
+}
+
+/* ==================
+   HALAMAN 3: FITUR
+   ================== */
+.btn-back {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-back:hover {
+    text-decoration: underline;
+}
+
+.feature-container {
+    background: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 16px;
+    text-align: left;
+}
+
+.btn-petunjuk {
+    background: none;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.modal-petunjuk {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    display: none; /* Sembunyi by default */
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-petunjuk.active {
+    display: block;
+}
+
+.modal-petunjuk ol {
+    margin-left: 20px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+#btn-tutup-petunjuk {
+    background: var(--primary-color);
+    color: var(--bg-color);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.input-grup {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.input-grup input[type="text"] {
+    flex-grow: 1;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.input-grup input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--neon-glow);
+}
+
+.input-grup .btn {
+    flex-shrink: 0; /* Agar tombol tidak mengecil */
+}
+
+/* Spinner Loading */
+#loading-spinner {
+    display: none; /* Sembunyi by default */
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Hasil TikTok */
+#tiktok-results {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tiktok-result-item {
+    background: var(--bg-color);
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.tiktok-result-item h4 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.tiktok-result-item p {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 12px;
+}
+
+.tiktok-result-item .download-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tiktok-result-item .download-links a {
+    background: var(--primary-color);
+    color: var(--bg-color);
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.tiktok-result-item .download-links a:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px var(--neon-glow);
+}
+
+.error-message {
+    color: #ff3b30;
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid #ff3b30;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+/* ==================
+   FOOTER
+   ================== */
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    font-weight: 300; /* Font tipis */
+    font-size: 14px;
+    color: var(--text-color);
+    opacity: 0.6;
+    z-index: 10;
+    margin-top: auto; /* Mendorong footer ke bawah */
+}
+
+/* ==================
+   RESPONSIVE
+   ================== */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+    h2 {
+        font-size: 1.8rem;
+    }
+    .device-info-grid {
+        grid-template-columns: 1fr; /* Satu kolom di HP */
+    }
+    .input-grup {
+        flex-direction: column;
+    }
+    .content {
+        padding: 10px;
+    }
+    #theme-toggle {
+        top: 10px;
+        right: 10px;
+    }
+}
