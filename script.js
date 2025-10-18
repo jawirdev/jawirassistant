@@ -1,4 +1,4 @@
-/* global Chart */ // Memberitahu linter bahwa Chart.js ada secara global
+/* global Chart */
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const cursorLight = document.querySelector('.cursor-light');
     
-    // (BARU) Navigasi Sidenav
+    // Navigasi Sidenav
     const menuToggle = document.getElementById('menu-toggle');
     const sidenav = document.getElementById('sidenav');
     const overlay = document.getElementById('overlay');
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Halaman Fitur (Umum)
     const btnBack = document.querySelectorAll('.btn-back');
 
-    // Halaman 1 (Info Device)
+    // Halaman 1 (Info Device) - Variabel tetap sama
     const infoTime = document.getElementById('info-time');
     const infoDevice = document.getElementById('info-device');
     const infoBattery = document.getElementById('info-battery');
@@ -34,51 +34,62 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoNetwork = document.getElementById('info-network');
 
     // Halaman 3 (TikTok)
-    const btnPetunjukTiktok = document.getElementById('btn-petunjuk-tiktok');
-    const modalPetunjukTiktok = document.getElementById('modal-petunjuk-tiktok');
-    const btnTutupPetunjuk = document.getElementById('btn-tutup-petunjuk');
     const tiktokUrlInput = document.getElementById('tiktok-url');
     const btnDownloadTiktok = document.getElementById('btn-download-tiktok');
-    const loadingSpinner = document.getElementById('loading-spinner');
+    const loadingSpinnerTiktok = document.getElementById('loading-spinner-tiktok');
     const tiktokResults = document.getElementById('tiktok-results');
 
-    // (BARU) Variabel untuk Chart (agar tidak dibuat ulang)
+    // (BARU) Halaman 4 (YT Play)
+    const ytPlayQueryInput = document.getElementById('yt-play-query');
+    const btnSearchYtPlay = document.getElementById('btn-search-yt-play');
+    const loadingSpinnerYtPlay = document.getElementById('loading-spinner-yt-play');
+    const ytPlayResults = document.getElementById('yt-play-results');
+
+    // (BARU) Halaman 5 (YT Transcript)
+    const ytTranscriptUrlInput = document.getElementById('yt-transcript-url');
+    const btnGetYtTranscript = document.getElementById('btn-get-yt-transcript');
+    const loadingSpinnerYtTranscript = document.getElementById('loading-spinner-yt-transcript');
+    const ytTranscriptResults = document.getElementById('yt-transcript-results');
+
+    // (BARU) Halaman 6 (YT Summary)
+    const ytSummaryUrlInput = document.getElementById('yt-summary-url');
+    const btnGetYtSummary = document.getElementById('btn-get-yt-summary');
+    const loadingSpinnerYtSummary = document.getElementById('loading-spinner-yt-summary');
+    const ytSummaryResults = document.getElementById('yt-summary-results');
+
+    // Halaman 7 (Analitik)
     let visitorsChartInstance = null;
     let featuresChartInstance = null;
 
 
     // ==================================
-    // (BARU) FUNGSI NAVIGASI SIDENAV
+    // FUNGSI NAVIGASI SIDENAV (Tetap)
     // ==================================
     function toggleMenu() {
         sidenav.classList.toggle('active');
         overlay.classList.toggle('active');
     }
-
     menuToggle.addEventListener('click', toggleMenu);
     overlay.addEventListener('click', toggleMenu);
-
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault(); // Mencegah link default
+            e.preventDefault();
             const targetPageId = e.currentTarget.getAttribute('data-target');
             if (targetPageId) {
                 showPage(targetPageId);
-                toggleMenu(); // Tutup menu setelah klik
+                toggleMenu();
             }
         });
     });
 
-
     // ==================================
-    // FUNGSI GANTI HALAMAN
+    // FUNGSI GANTI HALAMAN (Tetap)
     // ==================================
     function showPage(pageId) {
         pages.forEach(page => {
             if (page.id === pageId) {
                 setTimeout(() => {
                     page.classList.add('active');
-                    // (BARU) Jika halaman analitik, muat grafiknya
                     if (pageId === 'page-analytics') {
                         loadAnalyticsCharts();
                     }
@@ -88,58 +99,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // Navigasi: Halaman 1 -> Halaman 2
-    btnMulai.addEventListener('click', () => {
-        showPage('page-menu');
-    });
-
-    // Navigasi: Halaman 2 -> Halaman 3 (Fitur)
+    // ... Event listener navigasi (btnMulai, btnCoba, btnBack) tetap sama ...
+    btnMulai.addEventListener('click', () => showPage('page-menu'));
     btnCoba.forEach(btn => {
         btn.addEventListener('click', (e) => {
             const targetPageId = e.target.getAttribute('data-target');
-            if (targetPageId) {
-                showPage(targetPageId);
-            }
+            if (targetPageId) showPage(targetPageId);
         });
     });
-
-    // Navigasi: Halaman 3/4 (Fitur) -> Halaman 2
     btnBack.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            // (BERUBAH) Ambil target dari currentTarget (tombol)
             const targetPageId = e.currentTarget.getAttribute('data-target');
-            if (targetPageId) {
-                showPage(targetPageId);
-            }
+            if (targetPageId) showPage(targetPageId);
         });
     });
 
     // ==================================
-    // FUNGSI MODE GELAP / TERANG
+    // FUNGSI MODE GELAP / TERANG (Tetap)
     // ==================================
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
     }
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
-        if (document.body.classList.contains('dark-mode')) {
-            localStorage.setItem('theme', 'dark');
-        } else {
-            localStorage.setItem('theme', 'light');
-        }
-        // (BARU) Muat ulang grafik jika di halaman analitik agar warna update
+        localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         if (document.getElementById('page-analytics').classList.contains('active')) {
-            loadAnalyticsCharts(true); // 'true' berarti paksa muat ulang
+            loadAnalyticsCharts(true);
         }
     });
 
     // ==================================
-    // FUNGSI EFEK VISUAL
+    // FUNGSI EFEK VISUAL (Tetap)
     // ==================================
-    // (BERUBAH) Efek Kuas/Cahaya
     document.addEventListener('mousemove', (e) => {
-        // Penyesuaian agar posisi lebih pas di tengah kuas
         cursorLight.style.transform = `translate(${e.clientX - 250}px, ${e.clientY - 250}px)`;
     });
     document.addEventListener('touchmove', (e) => {
@@ -147,16 +139,14 @@ document.addEventListener('DOMContentLoaded', () => {
         cursorLight.style.transform = `translate(${touch.clientX - 250}px, ${touch.clientY - 250}px)`;
     });
 
-
     // ==================================
-    // FUNGSI HALAMAN 1: INFO DEVICE
+    // FUNGSI HALAMAN 1: INFO DEVICE (Tetap)
     // ==================================
     function loadDeviceInfo() {
         // ... (Fungsi ini tidak berubah, tetap sama)
         function updateTime() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            infoTime.textContent = now.toLocaleDateString('id-ID', options);
+            infoTime.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
         updateTime();
         setInterval(updateTime, 1000);
@@ -165,8 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navigator.getBattery().then(battery => {
                 function updateBatteryStatus() {
                     const level = (battery.level * 100).toFixed(0);
-                    const charging = battery.charging ? '(Mengisi daya)' : '(Tidak mengisi)';
-                    infoBattery.textContent = `${level}% ${charging}`;
+                    infoBattery.textContent = `${level}% ${battery.charging ? '(Mengisi daya)' : '(Tidak mengisi)'}`;
                 }
                 updateBatteryStatus();
                 battery.addEventListener('levelchange', updateBatteryStatus);
@@ -174,16 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } else { infoBattery.textContent = 'Tidak didukung'; }
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        if (connection) { infoNetwork.textContent = connection.effectiveType ? `${connection.effectiveType.toUpperCase()}` : 'Tidak diketahui';
-        } else { infoNetwork.textContent = 'Tidak didukung'; }
+        infoNetwork.textContent = connection ? (connection.effectiveType ? `${connection.effectiveType.toUpperCase()}` : 'Tidak diketahui') : 'Tidak didukung';
         fetch('https://ipapi.co/json/')
             .then(response => response.json())
             .then(data => {
                 infoIp.textContent = data.ip || 'Gagal memuat';
                 infoLocation.textContent = `${data.city}, ${data.region}, ${data.country_name}`;
-            })
-            .catch(error => {
-                console.error('Error fetching IP info:', error);
+            }).catch(() => {
                 infoIp.textContent = 'Gagal memuat';
                 infoLocation.textContent = 'Gagal memuat';
             });
@@ -191,59 +177,101 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDeviceInfo();
 
     // ==================================
-    // FUNGSI HALAMAN 2: MENU
+    // FUNGSI HALAMAN 2: MENU (Tetap)
     // ==================================
     menuHeaders.forEach(header => {
-        // ... (Fungsi ini tidak berubah, tetap sama)
         header.addEventListener('click', () => {
             const item = header.closest('.menu-item');
             item.classList.toggle('active');
             document.querySelectorAll('.menu-item').forEach(otherItem => {
-                if (otherItem !== item) {
-                    otherItem.classList.remove('active');
-                }
+                if (otherItem !== item) otherItem.classList.remove('active');
             });
         });
     });
+
+    // ==================================
+    // FUNGSI API (UMUM)
+    // ==================================
+    
+    /**
+     * Fungsi fetch API umum dengan penanganan error
+     * @param {string} url - URL API yang akan dipanggil
+     * @param {string} resultsContainerId - ID elemen kontainer hasil
+     * @param {HTMLElement} spinnerElement - Elemen spinner yang akan ditampilkan
+     * @param {function} displayFunction - Fungsi untuk menampilkan data sukses
+     */
+    async function fetchApi(url, resultsContainerId, spinnerElement, displayFunction) {
+        const resultsContainer = document.getElementById(resultsContainerId);
+        resultsContainer.innerHTML = '';
+        spinnerElement.style.display = 'flex';
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Error Jaringan: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            
+            if (data.success === true && data.data) {
+                displayFunction(data.data, resultsContainerId);
+            } else {
+                // Tangani API siputzx (status: true)
+                if (data.status === true && data.data) {
+                    displayFunction(data.data, resultsContainerId);
+                } else {
+                    throw new Error(data.message || data.msg || 'Format API tidak dikenal atau data kosong.');
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching API:', error);
+            displayError(error.message || 'Terjadi kesalahan.', resultsContainerId);
+        } finally {
+            spinnerElement.style.display = 'none';
+        }
+    }
+
+    /**
+     * (BERUBAH) Menampilkan pesan error di kontainer yang spesifik
+     * @param {string} message - Pesan error
+     * @param {string} containerId - ID elemen kontainer
+     */
+    function displayError(message, containerId) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = `<div class="error-message">${message}</div>`;
+        }
+    }
 
 
     // ==================================
     // FUNGSI HALAMAN 3: TIKTOK
     // ==================================
-    // ... (Semua fungsi TikTok (petunjuk, download, displayResults) tetap sama)
-    btnPetunjukTiktok.addEventListener('click', () => modalPetunjukTiktok.classList.add('active'));
-    btnTutupPetunjuk.addEventListener('click', () => modalPetunjukTiktok.classList.remove('active'));
+    // ... (Petunjuk tetap sama)
+    document.getElementById('btn-petunjuk-tiktok').addEventListener('click', () => document.getElementById('modal-petunjuk-tiktok').classList.add('active'));
+    // (Fungsi tutup petunjuk belum ada, kita tambahkan)
+    const btnTutupPetunjukTiktok = document.getElementById('btn-tutup-petunjuk');
+    if (btnTutupPetunjukTiktok) {
+        btnTutupPetunjukTiktok.addEventListener('click', () => document.getElementById('modal-petunjuk-tiktok').classList.remove('active'));
+    }
+
     btnDownloadTiktok.addEventListener('click', () => {
         const url = tiktokUrlInput.value.trim();
-        if (!url) { alert('Silakan masukkan URL TikTok terlebih dahulu.'); return; }
-        tiktokResults.innerHTML = '';
-        loadingSpinner.style.display = 'flex';
+        if (!url) {
+            alert('Silakan masukkan URL TikTok.');
+            return;
+        }
         const apiUrl = `https://api.siputzx.my.id/api/d/tiktok/v2?url=${encodeURIComponent(url)}`;
-        fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
-                return response.json();
-            })
-            .then(data => {
-                loadingSpinner.style.display = 'none';
-                if (data.status === true && data.data) { displayTikTokResults(data.data); }
-                else { displayError(data.message || 'Gagal mendapatkan data dari API.'); }
-            })
-            .catch(error => {
-                loadingSpinner.style.display = 'none';
-                console.error('Error fetching TikTok data:', error);
-                displayError('Terjadi kesalahan. Cek konsol (F12) untuk detail.');
-            });
+        fetchApi(apiUrl, 'tiktok-results', loadingSpinnerTiktok, displayTikTokResults);
     });
-    function displayTikTokResults(data) {
-        // ... (fungsi sama persis)
+
+    function displayTikTokResults(data, containerId) {
+        const container = document.getElementById(containerId);
         const metadata = data.metadata;
         const downloads = data.download;
-        tiktokResults.innerHTML = '';
-        const resultElement = document.createElement('div');
-        resultElement.classList.add('tiktok-result-item');
+
         let title = metadata.title || metadata.description || 'Video TikTok';
-        if (title.length > 100) { title = title.substring(0, 100) + '...'; }
+        if (title.length > 100) title = title.substring(0, 100) + '...';
+
         let downloadLinksHTML = '';
         if (downloads.video && downloads.video.length > 0) {
             downloads.video.forEach((videoUrl, index) => {
@@ -251,31 +279,116 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (videoUrl.includes('original')) qualityLabel = 'Video Original (HD)';
                 downloadLinksHTML += `<a href="${videoUrl}" target="_blank" download>Unduh ${qualityLabel}</a>`;
             });
-        } else { downloadLinksHTML = '<p>Tidak ada link video yang ditemukan.</p>'; }
-        resultElement.innerHTML = `
-            <h4>${title}</h4>
-            <p>
-                <i class="bi bi-play-circle"></i> ${metadata.stats.playCount.toLocaleString('id-ID')} views | 
-                <i class="bi bi-heart"></i> ${metadata.stats.likeCount.toLocaleString('id-ID')} likes
-            </p>
-            <div class="download-links">${downloadLinksHTML}</div>`;
-        tiktokResults.appendChild(resultElement);
-    }
-    function displayError(message) {
-        tiktokResults.innerHTML = `<div class="error-message">${message}</div>`;
+        } else {
+            downloadLinksHTML = '<p>Tidak ada link video yang ditemukan.</p>';
+        }
+
+        container.innerHTML = `
+            <div class="result-item">
+                <h4>${title}</h4>
+                <p>
+                    <i class="bi bi-play-circle"></i> ${metadata.stats.playCount.toLocaleString('id-ID')} | 
+                    <i class="bi bi-heart"></i> ${metadata.stats.likeCount.toLocaleString('id-ID')}
+                </p>
+                <div class="download-links">${downloadLinksHTML}</div>
+            </div>`;
     }
 
     // ==================================
-    // (BARU) FUNGSI HALAMAN 4: ANALITIK
+    // (BARU) FUNGSI HALAMAN 4: YT PLAY
+    // ==================================
+    btnSearchYtPlay.addEventListener('click', () => {
+        const query = ytPlayQueryInput.value.trim();
+        if (!query) {
+            alert('Silakan masukkan judul video atau lagu.');
+            return;
+        }
+        const apiUrl = `https://api.zenzxz.my.id/api/search/play?query=${encodeURIComponent(query)}`;
+        fetchApi(apiUrl, 'yt-play-results', loadingSpinnerYtPlay, displayYouTubePlayResults);
+    });
+
+    function displayYouTubePlayResults(data, containerId) {
+        const container = document.getElementById(containerId);
+        const metadata = data.metadata;
+
+        container.innerHTML = `
+            <div class="result-item">
+                <h4>${metadata.title}</h4>
+                <p>
+                    <i class="bi bi-person-circle"></i> ${metadata.channel || 'Tidak diketahui'} | 
+                    <i class="bi bi-clock-history"></i> ${metadata.duration || 'N/A'}
+                </p>
+                <div class="download-links">
+                    <a href="${data.dl_mp3}" target="_blank" download>Unduh MP3 (128kbps)</a>
+                    <a href="${data.dl_mp4}" target="_blank" download>Unduh MP4 (480p)</a>
+                </div>
+            </div>`;
+    }
+
+    // ==================================
+    // (BARU) FUNGSI HALAMAN 5: YT TRANSCRIPT
+    // ==================================
+    btnGetYtTranscript.addEventListener('click', () => {
+        const url = ytTranscriptUrlInput.value.trim();
+        if (!url) {
+            alert('Silakan masukkan URL YouTube.');
+            return;
+        }
+        const apiUrl = `https://api.zenzxz.my.id/api/tools/ytranscript?url=${encodeURIComponent(url)}`;
+        fetchApi(apiUrl, 'yt-transcript-results', loadingSpinnerYtTranscript, displayTranscriptResults);
+    });
+
+    function displayTranscriptResults(data, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = `
+            <div class="transcript-box">
+                <h4>${data.title}</h4>
+                <p>${data.transcript}</p>
+            </div>`;
+    }
+
+    // ==================================
+    // (BARU) FUNGSI HALAMAN 6: YT SUMMARY
+    // ==================================
+    btnGetYtSummary.addEventListener('click', () => {
+        const url = ytSummaryUrlInput.value.trim();
+        if (!url) {
+            alert('Silakan masukkan URL YouTube.');
+            return;
+        }
+        // Menambahkan lang=id sesuai permintaan API
+        const apiUrl = `https://api.zenzxz.my.id/api/tools/ytsummarizer?url=${encodeURIComponent(url)}&lang=id`;
+        fetchApi(apiUrl, 'yt-summary-results', loadingSpinnerYtSummary, displaySummaryResults);
+    });
+
+    function displaySummaryResults(data, containerId) {
+        const container = document.getElementById(containerId);
+        // API ini mengembalikan HTML dalam string, kita perlu membersihkannya
+        let content = data.content.replace(/<br\s*\/?>/gi, '\n'); // Ganti <br> dengan baris baru
+        content = content.replace(/<\/?(h1|h2|h3|h4|h5|b|strong|p|ul|li|ol)>/gi, ''); // Hapus tag HTML dasar
+
+        // Format ulang poin kunci jika ada
+        if (content.includes('Poin Kunci:')) {
+            content = content.replace('Poin Kunci:', '<h5>Poin Kunci:</h5><ul>') + '</ul>';
+            content = content.replace(/\*\* (.*?)\n/g, '<li><strong>$1</strong></li>');
+        }
+
+        container.innerHTML = `
+            <div class="summary-box">
+                ${content}
+            </div>`;
+    }
+
+    // ==================================
+    // FUNGSI HALAMAN 7: ANALITIK (Tetap)
     // ==================================
     function loadAnalyticsCharts(forceReload = false) {
-        // Ambil warna dari CSS Variables
+        // ... (Fungsi ini tidak berubah, tetap sama)
         const isDarkMode = document.body.classList.contains('dark-mode');
         const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
         const textColor = isDarkMode ? '#e0e9f5' : '#1a1a1a';
         const primaryColor = isDarkMode ? '#00bfff' : '#007aff';
         
-        // Hancurkan chart lama jika ada (untuk ganti tema)
         if (forceReload) {
             if (visitorsChartInstance) visitorsChartInstance.destroy();
             if (featuresChartInstance) featuresChartInstance.destroy();
@@ -283,70 +396,54 @@ document.addEventListener('DOMContentLoaded', () => {
             featuresChartInstance = null;
         }
 
-        // --- Grafik Pengunjung ---
         if (!visitorsChartInstance) {
             const ctxVisitors = document.getElementById('visitors-chart').getContext('2d');
-            // (Data Placeholder)
-            const visitorData = {
-                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-                datasets: [{
-                    label: 'Pengunjung',
-                    data: [150, 230, 180, 210, 250, 300, 280], // Data dummy
-                    fill: true,
-                    backgroundColor: primaryColor + '33', // Transparan
-                    borderColor: primaryColor,
-                    tension: 0.4, // Membuat garis melengkung
-                    pointBackgroundColor: primaryColor,
-                }]
-            };
             visitorsChartInstance = new Chart(ctxVisitors, {
                 type: 'line',
-                data: visitorData,
+                data: {
+                    labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                    datasets: [{
+                        label: 'Pengunjung',
+                        data: [150, 230, 180, 210, 250, 300, 280],
+                        fill: true,
+                        backgroundColor: primaryColor + '33',
+                        borderColor: primaryColor,
+                        tension: 0.4,
+                        pointBackgroundColor: primaryColor,
+                    }]
+                },
                 options: {
                     responsive: true,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { color: textColor },
-                            grid: { color: gridColor }
-                        },
-                        x: {
-                            ticks: { color: textColor },
-                            grid: { color: gridColor }
-                        }
+                        y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } },
+                        x: { ticks: { color: textColor }, grid: { color: gridColor } }
                     }
                 }
             });
         }
-
-        // --- Grafik Fitur ---
         if (!featuresChartInstance) {
             const ctxFeatures = document.getElementById('features-chart').getContext('2d');
-            // (Data Placeholder)
-            const featureData = {
-                labels: ['TikTok Downloader', 'YouTube Downloader (Segera)', 'Lainnya'],
-                datasets: [{
-                    label: 'Penggunaan Fitur',
-                    data: [450, 0, 120], // Data dummy
-                    backgroundColor: [
-                        primaryColor,
-                        '#8e8e93', // Abu-abu
-                        isDarkMode ? '#1a2940' : '#e0e0e0'
-                    ],
-                    borderColor: 'transparent',
-                }]
-            };
             featuresChartInstance = new Chart(ctxFeatures, {
-                type: 'doughnut', // Tipe Donat
-                data: featureData,
+                type: 'doughnut',
+                data: {
+                    labels: ['TikTok', 'YT Play', 'Transkrip', 'Ringkasan'],
+                    datasets: [{
+                        label: 'Penggunaan Fitur',
+                        data: [450, 210, 80, 50], // Data dummy diperbarui
+                        backgroundColor: [
+                            primaryColor,
+                            '#ff3b30', // Merah (YT)
+                            '#34c759', // Hijau
+                            '#ff9500'  // Oranye
+                        ],
+                        borderColor: 'transparent',
+                    }]
+                },
                 options: {
                     responsive: true,
                     plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: textColor }
-                        }
+                        legend: { position: 'bottom', labels: { color: textColor } }
                     }
                 }
             });
@@ -354,3 +451,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
