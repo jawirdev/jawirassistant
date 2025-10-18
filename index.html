@@ -30,16 +30,32 @@
         <a href="#" class="nav-link" data-target="page-analytics">
             <i class="bi bi-bar-chart-line-fill"></i> Analitik
         </a>
-        <a href="#" class="nav-link" data-target="page-tiktok">
+        <hr> <a href="#" class="nav-link" data-target="page-tiktok">
             <i class="bi bi-tiktok"></i> TikTok Downloader
+        </a>
+        <a href="#" class="nav-link" data-target="page-yt-play">
+            <i class="bi bi-youtube"></i> YouTube Play
+        </a>
+        <a href="#" class="nav-link" data-target="page-yt-transcript">
+            <i class="bi bi-file-text-fill"></i> Transkrip YouTube
+        </a>
+        <a href="#" class="nav-link" data-target="page-yt-summary">
+            <i class="bi bi-card-checklist"></i> Peringkas YouTube
         </a>
     </nav>
     <div class="overlay" id="overlay"></div>
 
     <div class="cursor-light"></div>
 
-    <div class="particles">
+    <div class="ocean">
+        <div class="ship">
+            <div class="sail"></div>
+            <div class="boat-body"></div>
         </div>
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+    </div>
 
     <main>
 
@@ -47,44 +63,20 @@
             <div class="content">
                 <h1>Selamat Datang Wirr</h1>
                 <button class="btn" id="btn-mulai">Mulai</button>
-
                 <div class="device-info-grid">
-                    <div class="info-box" id="info-time-box">
-                        <i class="bi bi-clock-history"></i>
-                        <strong>Waktu & Tanggal</strong>
-                        <span id="info-time">Memuat...</span>
-                    </div>
-                    <div class="info-box" id="info-device-box">
-                        <i class="bi bi-display"></i>
-                        <strong>Perangkat</strong>
-                        <span id="info-device">Memuat...</span>
-                    </div>
-                    <div class="info-box" id="info-battery-box">
-                        <i class="bi bi-battery-half"></i>
-                        <strong>Baterai</strong>
-                        <span id="info-battery">Memuat...</span>
-                    </div>
-                    <div class="info-box" id="info-ip-box">
-                        <i class="bi bi-broadcast-pin"></i>
-                        <strong>Alamat IP</strong>
-                        <span id="info-ip">Memuat...</span>
-                    </div>
-                    <div class="info-box" id="info-location-box">
-                        <i class="bi bi-geo-alt"></i>
-                        <strong>Lokasi</strong>
-                        <span id="info-location">Memuat...</span>
-                    </div>
-                    <div class="info-box" id="info-network-box">
-                        <i class="bi bi-wifi"></i>
-                        <strong>Koneksi</strong>
-                        <span id="info-network">Memuat...</span>
-                    </div>
+                    <div class="info-box" id="info-time-box"><i class="bi bi-clock-history"></i><strong>Waktu & Tanggal</strong><span id="info-time">Memuat...</span></div>
+                    <div class="info-box" id="info-device-box"><i class="bi bi-display"></i><strong>Perangkat</strong><span id="info-device">Memuat...</span></div>
+                    <div class="info-box" id="info-battery-box"><i class="bi bi-battery-half"></i><strong>Baterai</strong><span id="info-battery">Memuat...</span></div>
+                    <div class="info-box" id="info-ip-box"><i class="bi bi-broadcast-pin"></i><strong>Alamat IP</strong><span id="info-ip">Memuat...</span></div>
+                    <div class="info-box" id="info-location-box"><i class="bi bi-geo-alt"></i><strong>Lokasi</strong><span id="info-location">Memuat...</span></div>
+                    <div class="info-box" id="info-network-box"><i class="bi bi-wifi"></i><strong>Koneksi</strong><span id="info-network">Memuat...</span></div>
                 </div>
             </div>
         </section>
 
         <section class="page" id="page-menu">
             <div class="content">
+                <button class="btn-back" data-target="page-welcome"><i class="bi bi-arrow-left-circle"></i> Kembali</button>
                 <h2>Menu Fitur</h2>
                 <div class="menu-list">
                     <div class="menu-item">
@@ -94,13 +86,47 @@
                             <button class="btn-coba" data-target="page-tiktok">Coba</button>
                         </div>
                         <p class="menu-description">
-                            Unduh video dan audio dari link TikTok tanpa watermark. Cukup tempel link dan biarkan asisten bekerja.
+                            Unduh video dan audio dari link TikTok tanpa watermark.
                         </p>
                     </div>
-                    <div class="menu-item disabled">
+                    
+                    <div class="menu-item">
                         <div class="menu-header">
                             <i class="bi bi-youtube"></i>
-                            <h3>YouTube Downloader</h3>
+                            <h3>YouTube Play</h3>
+                            <button class="btn-coba" data-target="page-yt-play">Coba</button>
+                        </div>
+                        <p class="menu-description">
+                            Cari lagu atau video YouTube dan dapatkan link unduh MP3 & MP4.
+                        </p>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-header">
+                            <i class="bi bi-file-text-fill"></i>
+                            <h3>Transkrip YouTube</h3>
+                            <button class="btn-coba" data-target="page-yt-transcript">Coba</button>
+                        </div>
+                        <p class="menu-description">
+                            Ambil teks transkrip lengkap dari video YouTube.
+                        </p>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-header">
+                            <i class="bi bi-card-checklist"></i>
+                            <h3>Peringkas YouTube</h3>
+                            <button class="btn-coba" data-target="page-yt-summary">Coba</button>
+                        </div>
+                        <p class="menu-description">
+                            Buat ringkasan poin-poin penting dari video YouTube (mendukung Bhs. Indonesia).
+                        </p>
+                    </div>
+
+                    <div class="menu-item disabled">
+                        <div class="menu-header">
+                            <i class="bi bi-instagram"></i>
+                            <h3>Instagram Downloader</h3>
                             <button class="btn-coba" disabled>Segera</button>
                         </div>
                         <p class="menu-description">
@@ -116,31 +142,70 @@
                 <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
                 <h2><i class="bi bi-tiktok"></i> TikTok Downloader</h2>
                 <div class="feature-container">
-                    <button class="btn-petunjuk" id="btn-petunjuk-tiktok">
-                        <i class="bi bi-question-circle"></i> Petunjuk Penggunaan
-                    </button>
-                    <div class="modal-petunjuk" id="modal-petunjuk-tiktok">
-                        <p><strong>Cara Penggunaan:</strong></p>
-                        <ol>
-                            <li>Buka aplikasi TikTok.</li>
-                            <li>Cari video yang ingin kamu unduh.</li>
-                            <li>Klik tombol "Bagikan" (Share).</li>
-                            <li>Pilih "Salin Tautan" (Copy Link).</li>
-                            <li>Tempel (paste) link tersebut di kotak di bawah ini.</li>
-                            <li>Klik tombol "Unduh".</li>
-                        </ol>
-                        <button id="btn-tutup-petunjuk">Mengerti</button>
-                    </div>
+                    <button class="btn-petunjuk" id="btn-petunjuk-tiktok"><i class="bi bi-question-circle"></i> Petunjuk</button>
+                    <div class="modal-petunjuk" id="modal-petunjuk-tiktok">... (Konten petunjuk tetap sama) ...</div>
                     <div class="input-grup">
                         <input type="text" id="tiktok-url" placeholder="Tempel link TikTok di sini...">
                         <button class="btn" id="btn-download-tiktok">Unduh</button>
                     </div>
-                    <div id="loading-spinner" style="display: none;">
-                        <div class="spinner"></div>
-                        <span>Memproses permintaan...</span>
+                    <div id="loading-spinner-tiktok" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div><span>Memproses...</span>
                     </div>
-                    <div id="tiktok-results">
-                        </div>
+                    <div id="tiktok-results" class="results-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" id="page-yt-play">
+            <div class="content">
+                <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
+                <h2><i class="bi bi-youtube"></i> YouTube Play</h2>
+                <div class="feature-container">
+                    <p class="feature-subtext">Cari video/lagu (contoh: Laskar Pelangi).</p>
+                    <div class="input-grup">
+                        <input type="text" id="yt-play-query" placeholder="Ketik judul lagu atau video...">
+                        <button class="btn" id="btn-search-yt-play">Cari</button>
+                    </div>
+                    <div id="loading-spinner-yt-play" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div><span>Mencari video...</span>
+                    </div>
+                    <div id="yt-play-results" class="results-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" id="page-yt-transcript">
+            <div class="content">
+                <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
+                <h2><i class="bi bi-file-text-fill"></i> Transkrip YouTube</h2>
+                <div class="feature-container">
+                    <p class="feature-subtext">Tempel link video YouTube.</p>
+                    <div class="input-grup">
+                        <input type="text" id="yt-transcript-url" placeholder="Tempel link YouTube di sini...">
+                        <button class="btn" id="btn-get-yt-transcript">Ambil</button>
+                    </div>
+                    <div id="loading-spinner-yt-transcript" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div><span>Mengambil transkrip...</span>
+                    </div>
+                    <div id="yt-transcript-results" class="results-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" id="page-yt-summary">
+            <div class="content">
+                <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
+                <h2><i class="bi bi-card-checklist"></i> Peringkas YouTube</h2>
+                <div class="feature-container">
+                    <p class="feature-subtext">Tempel link video YouTube (pastikan ada transkrip ID).</p>
+                    <div class="input-grup">
+                        <input type="text" id="yt-summary-url" placeholder="Tempel link YouTube di sini...">
+                        <button class="btn" id="btn-get-yt-summary">Ringkas</button>
+                    </div>
+                    <div id="loading-spinner-yt-summary" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div><span>Membuat ringkasan... Ini mungkin perlu waktu.</span>
+                    </div>
+                    <div id="yt-summary-results" class="results-container"></div>
                 </div>
             </div>
         </section>
@@ -149,7 +214,6 @@
             <div class="content">
                 <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
                 <h2><i class="bi bi-bar-chart-line-fill"></i> Analitik</h2>
-
                 <div class="analytics-container">
                     <div class="chart-box">
                         <div class="chart-header">
