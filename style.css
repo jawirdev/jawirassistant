@@ -5,7 +5,7 @@
    VARIABEL WARNA
    ================== */
 :root {
-    /* Mode Terang */
+    /* ... (Variabel warna lain tetap) ... */
     --bg-color: #ffffff;
     --text-color: #1a1a1a;
     --primary-color: #007aff;
@@ -13,12 +13,13 @@
     --border-color: #e0e0e0;
     --neon-glow: rgba(0, 122, 255, 0.5);
     --cursor-light-color: rgba(0, 122, 255, 0.15);
-    /* (BARU) Warna Gelombang */
-    --wave-color: rgba(0, 122, 255, 0.2);
+    /* (DIUBAH) Warna gelombang lebih konsisten */
+    --wave-color: rgba(0, 122, 255, 0.1); 
+    --wave-color-dark-mode: rgba(0, 191, 255, 0.1);
 }
 
 body.dark-mode {
-    /* Mode Gelap */
+    /* ... (Variabel warna lain tetap) ... */
     --bg-color: #0d1a2e;
     --text-color: #e0e9f5;
     --primary-color: #00bfff;
@@ -26,21 +27,16 @@ body.dark-mode {
     --border-color: #2a3f5a;
     --neon-glow: rgba(0, 191, 255, 0.7);
     --cursor-light-color: rgba(0, 191, 255, 0.12);
-    /* (BARU) Warna Gelombang */
-    --wave-color: rgba(0, 191, 255, 0.2);
+    --wave-color: var(--wave-color-dark-mode);
 }
 
 /* ==================
    GAYA DASAR & RESET
    ================== */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.4s ease, color 0.4s ease;
@@ -58,14 +54,84 @@ main {
     align-items: center;
     justify-content: center;
     z-index: 10;
-    /* (BARU) Padding bawah agar tidak tertutup gelombang */
-    padding-bottom: 150px; 
+    padding-bottom: 150px;
 }
+
+/* ==================
+   (BARU) PRELOADER
+   ================== */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    opacity: 1;
+    visibility: visible;
+}
+#preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+/* Spinner untuk preloader (sama dgn loading-spinner) */
+#preloader .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* ==================
+   (BARU) TOAST NOTIFICATION
+   ================== */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1004;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.toast {
+    padding: 12px 18px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+    font-size: 15px;
+    animation: toast-in 0.3s ease forwards;
+    opacity: 0;
+}
+@keyframes toast-in {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+.toast.success {
+    background-color: #34c759;
+    color: #ffffff;
+}
+.toast.error {
+    background-color: #ff3b30;
+    color: #ffffff;
+}
+.toast.info {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
 
 /* ==================
    EFEK VISUAL
    ================== */
-
 /* Efek Cahaya Kuas (Tetap) */
 .cursor-light {
     position: fixed;
@@ -82,94 +148,78 @@ main {
     opacity: 0.8;
 }
 
-/* (DIHAPUS) Animasi Partikel */
-/* .particles { ... } */
-
-/* (BARU) Animasi Gelombang Laut */
+/* (DIUBAH) Animasi Gelombang Laut */
 .ocean {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 150px; /* Tinggi area gelombang */
-    z-index: 5; /* Di bawah konten, di atas background */
+    height: 150px;
+    z-index: 5;
     overflow: hidden;
     pointer-events: none;
 }
-
 .wave {
-    background: var(--wave-color);
+    background: var(--wave-color); /* (DIUBAH) Satu warna */
     border-radius: 1000% 1000% 0 0;
     position: absolute;
     width: 200%;
-    height: 100px;
     animation: wave-animation 10s linear infinite;
-    opacity: 0.5;
-    bottom: 0;
 }
-
 .wave.wave1 {
     animation-duration: 8s;
-    height: 120px;
-    opacity: 0.3;
+    height: 100px; /* Dibuat lebih tebal */
+    bottom: 0;
 }
 .wave.wave2 {
     animation-duration: 12s;
-    height: 100px;
-    opacity: 0.5;
-    bottom: 10px;
+    height: 120px; /* Dibuat lebih tebal */
+    bottom: 0;
 }
 .wave.wave3 {
     animation-duration: 10s;
-    height: 80px;
-    opacity: 0.2;
-    bottom: 20px;
+    height: 100px; /* Dibuat lebih tebal */
+    bottom: 5px;
 }
-
 @keyframes wave-animation {
     0% { transform: translateX(-50%); }
     100% { transform: translateX(0%); }
 }
 
-/* (BARU) Kapal CSS */
+/* (DIUBAH) Kapal CSS */
 .ship {
     position: absolute;
-    bottom: 80px; /* Posisi di atas gelombang */
+    bottom: 80px;
     left: 50%;
     width: 80px;
     height: 50px;
     z-index: 6;
-    /* Animasi naik turun (ombak) dan bolak-balik */
-    animation: ship-bob 4s ease-in-out infinite, 
+    animation: ship-bob 3s ease-in-out infinite, /* Dibuat lebih cepat */
                  ship-sail 30s linear infinite;
 }
-
 @keyframes ship-bob {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-15px) rotate(2deg); } /* (DIUBAH) Lebih drastis */
 }
-
 @keyframes ship-sail {
-    0% { left: -100px; } /* Mulai dari kiri layar */
-    100% { left: 100%; } /* Selesai di kanan layar */
+    0% { left: -100px; }
+    100% { left: 100%; }
 }
-
 .boat-body {
     width: 80px;
     height: 25px;
-    background: #8B4513; /* Coklat */
+    background: #8B4513;
     border-radius: 5px 5px 20px 20px;
     position: absolute;
     bottom: 0;
 }
-
 .sail {
     width: 4px;
     height: 40px;
     background: #a0522d;
     position: absolute;
     left: 38px;
-    bottom: 25px; /* Di atas badan kapal */
+    bottom: 25px;
 }
 .sail::after {
     content: '';
@@ -178,31 +228,27 @@ main {
     background: var(--secondary-color);
     border: 1px solid var(--border-color);
     position: absolute;
-    left: 4px; /* Menempel di tiang */
+    left: 4px;
     bottom: 0;
-    clip-path: polygon(0 0, 100% 50%, 0 100%); /* Bentuk layar */
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
 
 
 /* ==================
-   TOMBOL & KONTROL
+   TOMBOL & KONTROL (Tetap)
    ================== */
-/* ... (Style #menu-toggle dan #theme-toggle tetap sama) ... */
 #menu-toggle { position: fixed; top: 20px; left: 20px; background: var(--secondary-color); border: 1px solid var(--border-color); color: var(--primary-color); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 1002; font-size: 24px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
 #theme-toggle { position: fixed; top: 20px; right: 20px; background: var(--secondary-color); border: 1px solid var(--border-color); color: var(--primary-color); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 1001; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
 #menu-toggle:hover, #theme-toggle:hover { box-shadow: 0 0 20px var(--neon-glow); transform: scale(1.1); }
 .dark-mode #theme-toggle .bi-brightness-high-fill { display: none; }
 body:not(.dark-mode) #theme-toggle .bi-moon-stars-fill { display: none; }
-
-/* ... (Style .btn tetap sama) ... */
 .btn { background-color: var(--primary-color); color: var(--bg-color); font-weight: 500; font-size: 16px; padding: 12px 24px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
 .btn:hover, .btn:focus { transform: translateY(-3px); box-shadow: 0 6px 25px var(--neon-glow); }
 .btn:active { transform: translateY(1px) scale(0.98); box-shadow: 0 2px 10px var(--neon-glow); }
 
 /* ==================
-   NAVIGASI MENU SAMPING
+   NAVIGASI MENU SAMPING (Tetap)
    ================== */
-/* ... (Style .sidenav, .overlay, .nav-link tetap sama) ... */
 .sidenav { position: fixed; top: 0; left: 0; width: 280px; height: 100vh; background: var(--secondary-color); border-right: 1px solid var(--border-color); z-index: 1003; display: flex; flex-direction: column; padding: 20px; transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1); }
 .sidenav.active { transform: translateX(0); }
 .sidenav-header { padding: 10px 0 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; }
@@ -216,9 +262,8 @@ body:not(.dark-mode) #theme-toggle .bi-moon-stars-fill { display: none; }
 .overlay.active { display: block; opacity: 1; }
 
 /* ==================
-   SISTEM HALAMAN
+   SISTEM HALAMAN (Tetap)
    ================== */
-/* ... (Style .page, .content, h1, h2 tetap sama) ... */
 .page { width: 100%; max-width: 900px; margin: 0 auto; display: none; opacity: 0; transform: translateY(20px); animation: fadeOut 0.4s ease forwards; }
 .page.active { display: block; opacity: 1; transform: translateY(0); animation: fadeIn 0.5s ease forwards; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -228,9 +273,8 @@ h1 { font-size: 3rem; font-weight: 700; margin-bottom: 24px; color: var(--text-c
 h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--primary-color); text-align: left; padding-bottom: 10px; border-bottom: 2px solid var(--border-color); }
 
 /* ==================
-   HALAMAN 1: HOME
+   HALAMAN 1: HOME (Tetap)
    ================== */
-/* ... (Style #page-welcome .content, .device-info-grid, .info-box tetap sama) ... */
 #page-welcome .content { padding-top: 10vh; padding-bottom: 10vh; }
 .device-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 30px; text-align: left; }
 .info-box { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; transition: all 0.3s ease; }
@@ -240,15 +284,9 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
 .info-box span { font-size: 16px; font-weight: 500; word-wrap: break-word; }
 
 /* ==================
-   HALAMAN 2: MENU
+   HALAMAN 2: MENU (Tetap)
    ================== */
-/* (BARU) Pastikan tombol kembali di halaman menu terlihat benar */
-#page-menu .btn-back {
-    text-align: left;
-    padding: 0;
-    margin-bottom: 16px;
-}
-/* ... (Style .menu-list, .menu-item, .menu-header, .btn-coba, .menu-description tetap sama) ... */
+#page-menu .btn-back { text-align: left; padding: 0; margin-bottom: 16px; }
 .menu-list { display: flex; flex-direction: column; gap: 16px; text-align: left; }
 .menu-item { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; transition: all 0.3s ease; }
 .menu-item.disabled { opacity: 0.6; }
@@ -262,34 +300,28 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
 .menu-description { margin-top: 12px; margin-left: 36px; font-size: 15px; opacity: 0.8; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, margin-top 0.4s ease-out; }
 .menu-item.active .menu-description { max-height: 100px; margin-top: 12px; }
 
-
 /* ==================
-   HALAMAN 3: FITUR (UMUM)
+   HALAMAN 3: FITUR (UMUM) (Tetap)
    ================== */
 .btn-back { background: none; border: none; color: var(--primary-color); font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; text-align: left; padding: 0; margin-bottom: 16px; }
 .btn-back:hover { text-decoration: underline; }
-
 .feature-container { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-top: 16px; text-align: left; }
 .feature-subtext { font-size: 15px; opacity: 0.8; margin-bottom: 16px; text-align: left; }
 .btn-petunjuk { background: none; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
 .modal-petunjuk { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-bottom: 16px; display: none; animation: fadeIn 0.3s ease; }
 .modal-petunjuk.active { display: block; }
 .modal-petunjuk ol { margin-left: 20px; margin-top: 8px; margin-bottom: 16px; }
-#btn-tutup-petunjuk { background: var(--primary-color); color: var(--bg-color); border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.modal-petunjuk p { margin-bottom: 8px; }
+/* (DIUBAH) Tombol tutup petunjuk jadi class */
+.btn-tutup-petunjuk { background: var(--primary-color); color: var(--bg-color); border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
 .input-grup { display: flex; gap: 10px; margin-bottom: 20px; }
 .input-grup input[type="text"] { flex-grow: 1; padding: 12px 16px; font-size: 16px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); border-radius: 8px; transition: all 0.3s ease; }
 .input-grup input[type="text"]:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 10px var(--neon-glow); }
 .input-grup .btn { flex-shrink: 0; }
-
-/* (BERUBAH) Spinner jadi class */
 .loading-spinner { display: none; justify-content: center; align-items: center; gap: 12px; padding: 20px; font-size: 16px; opacity: 0.8; }
 .spinner { width: 24px; height: 24px; border: 3px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* (BARU) Kontainer Hasil (Umum) */
 .results-container { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
-
-/* Style Hasil (TikTok & YT Play) */
 .result-item { background: var(--bg-color); padding: 16px; border: 1px solid var(--border-color); border-radius: 8px; }
 .result-item h4 { margin-bottom: 8px; font-size: 1.1rem; }
 .result-item p { font-size: 14px; opacity: 0.8; margin-bottom: 12px; }
@@ -297,47 +329,16 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
 .result-item .download-links a { background: var(--primary-color); color: var(--bg-color); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
 .result-item .download-links a:hover { transform: scale(1.05); box-shadow: 0 4px 15px var(--neon-glow); }
 .error-message { color: #ff3b30; background: rgba(255, 59, 48, 0.1); border: 1px solid #ff3b30; padding: 12px; border-radius: 8px; }
-
-/* (BARU) Style Hasil Transkrip */
-.transcript-box {
-    background: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 16px;
-    max-height: 400px;
-    overflow-y: auto;
-    text-align: left;
-    white-space: pre-wrap; /* Agar baris baru terbaca */
-    line-height: 1.7;
-}
+.transcript-box { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; max-height: 400px; overflow-y: auto; text-align: left; white-space: pre-wrap; line-height: 1.7; }
 .transcript-box h4 { margin-bottom: 12px; }
-
-/* (BARU) Style Hasil Ringkasan */
-.summary-box {
-    background: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 16px;
-    text-align: left;
-    line-height: 1.7;
-}
+.summary-box { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; text-align: left; line-height: 1.7; }
 .summary-box h4 { margin-bottom: 12px; }
-.summary-box h5 { /* Misal: Poin Kunci */
-    font-size: 1.1rem;
-    color: var(--primary-color);
-    margin-top: 16px;
-    margin-bottom: 8px;
-}
-.summary-box p, .summary-box li {
-    font-size: 15px;
-    opacity: 0.9;
-}
-
+.summary-box h5 { font-size: 1.1rem; color: var(--primary-color); margin-top: 16px; margin-bottom: 8px; }
+.summary-box p, .summary-box li { font-size: 15px; opacity: 0.9; }
 
 /* ==================
-   HALAMAN ANALITIK
+   HALAMAN ANALITIK (Tetap)
    ================== */
-/* ... (Style .analytics-container, .chart-box, canvas tetap sama) ... */
 .analytics-container { display: grid; grid-template-columns: 1fr; gap: 24px; text-align: left; }
 .chart-box { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; }
 .chart-header { margin-bottom: 16px; }
@@ -348,7 +349,7 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
 canvas { width: 100% !important; height: auto !important; }
 
 /* ==================
-   FOOTER
+   FOOTER (Tetap)
    ================== */
 footer {
     width: 100%;
@@ -360,7 +361,6 @@ footer {
     opacity: 0.6;
     z-index: 10;
     margin-top: auto;
-    /* (BARU) Beri jarak dari dasar */
     position: relative;
 }
 
@@ -375,13 +375,17 @@ footer {
     #theme-toggle { top: 15px; right: 15px; }
     #menu-toggle { top: 15px; left: 15px; }
     #page-welcome .content { min-height: 80vh; justify-content: center; display: flex; flex-direction: column; padding-top: 5vh; }
-    /* (BARU) Sembunyikan kapal di HP agar tidak ramai */
-    .ship { display: none; }
     .ocean { height: 100px; }
+    
+    /* (DIUBAH) Kapal di HP */
+    .ship {
+        /* display: none; -- DIHAPUS */
+        transform: scale(0.7); /* Dikecilkan */
+        bottom: 60px; /* Disesuaikan posisinya */
+    }
 }
 
 @media (max-width: 600px) {
-    /* Grid info device jadi 2 kolom */
     .device-info-grid {
         grid-template-columns: 1fr 1fr;
     }
