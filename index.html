@@ -10,48 +10,29 @@
 </head>
 <body>
 
-    <button id="theme-toggle">
-        <i class="bi bi-brightness-high-fill"></i> <i class="bi bi-moon-stars-fill"></i> </button>
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
 
-    <button id="menu-toggle">
-        <i class="bi bi-list"></i>
-    </button>
+    <div id="toast-container"></div>
 
+    <button id="theme-toggle"><i class="bi bi-brightness-high-fill"></i><i class="bi bi-moon-stars-fill"></i></button>
+    <button id="menu-toggle"><i class="bi bi-list"></i></button>
     <nav class="sidenav" id="sidenav">
-        <div class="sidenav-header">
-            <h3>Jawir Assistant</h3>
-        </div>
-        <a href="#" class="nav-link" data-target="page-welcome">
-            <i class="bi bi-house-door-fill"></i> Selamat Datang
-        </a>
-        <a href="#" class="nav-link" data-target="page-menu">
-            <i class="bi bi-grid-fill"></i> Menu Fitur
-        </a>
-        <a href="#" class="nav-link" data-target="page-analytics">
-            <i class="bi bi-bar-chart-line-fill"></i> Analitik
-        </a>
-        <hr> <a href="#" class="nav-link" data-target="page-tiktok">
-            <i class="bi bi-tiktok"></i> TikTok Downloader
-        </a>
-        <a href="#" class="nav-link" data-target="page-yt-play">
-            <i class="bi bi-youtube"></i> YouTube Play
-        </a>
-        <a href="#" class="nav-link" data-target="page-yt-transcript">
-            <i class="bi bi-file-text-fill"></i> Transkrip YouTube
-        </a>
-        <a href="#" class="nav-link" data-target="page-yt-summary">
-            <i class="bi bi-card-checklist"></i> Peringkas YouTube
-        </a>
+        <div class="sidenav-header"><h3>Jawir Assistant</h3></div>
+        <a href="#" class="nav-link" data-target="page-welcome"><i class="bi bi-house-door-fill"></i> Selamat Datang</a>
+        <a href="#" class="nav-link" data-target="page-menu"><i class="bi bi-grid-fill"></i> Menu Fitur</a>
+        <a href="#" class="nav-link" data-target="page-analytics"><i class="bi bi-bar-chart-line-fill"></i> Analitik</a>
+        <hr>
+        <a href="#" class="nav-link" data-target="page-tiktok"><i class="bi bi-tiktok"></i> TikTok Downloader</a>
+        <a href="#" class="nav-link" data-target="page-yt-play"><i class="bi bi-youtube"></i> YouTube Play</a>
+        <a href="#" class="nav-link" data-target="page-yt-transcript"><i class="bi bi-file-text-fill"></i> Transkrip YouTube</a>
+        <a href="#" class="nav-link" data-target="page-yt-summary"><i class="bi bi-card-checklist"></i> Peringkas YouTube</a>
     </nav>
     <div class="overlay" id="overlay"></div>
-
     <div class="cursor-light"></div>
-
     <div class="ocean">
-        <div class="ship">
-            <div class="sail"></div>
-            <div class="boat-body"></div>
-        </div>
+        <div class="ship"><div class="sail"></div><div class="boat-body"></div></div>
         <div class="wave wave1"></div>
         <div class="wave wave2"></div>
         <div class="wave wave3"></div>
@@ -79,60 +60,11 @@
                 <button class="btn-back" data-target="page-welcome"><i class="bi bi-arrow-left-circle"></i> Kembali</button>
                 <h2>Menu Fitur</h2>
                 <div class="menu-list">
-                    <div class="menu-item">
-                        <div class="menu-header">
-                            <i class="bi bi-tiktok"></i>
-                            <h3>TikTok Downloader</h3>
-                            <button class="btn-coba" data-target="page-tiktok">Coba</button>
-                        </div>
-                        <p class="menu-description">
-                            Unduh video dan audio dari link TikTok tanpa watermark.
-                        </p>
-                    </div>
-                    
-                    <div class="menu-item">
-                        <div class="menu-header">
-                            <i class="bi bi-youtube"></i>
-                            <h3>YouTube Play</h3>
-                            <button class="btn-coba" data-target="page-yt-play">Coba</button>
-                        </div>
-                        <p class="menu-description">
-                            Cari lagu atau video YouTube dan dapatkan link unduh MP3 & MP4.
-                        </p>
-                    </div>
-
-                    <div class="menu-item">
-                        <div class="menu-header">
-                            <i class="bi bi-file-text-fill"></i>
-                            <h3>Transkrip YouTube</h3>
-                            <button class="btn-coba" data-target="page-yt-transcript">Coba</button>
-                        </div>
-                        <p class="menu-description">
-                            Ambil teks transkrip lengkap dari video YouTube.
-                        </p>
-                    </div>
-
-                    <div class="menu-item">
-                        <div class="menu-header">
-                            <i class="bi bi-card-checklist"></i>
-                            <h3>Peringkas YouTube</h3>
-                            <button class="btn-coba" data-target="page-yt-summary">Coba</button>
-                        </div>
-                        <p class="menu-description">
-                            Buat ringkasan poin-poin penting dari video YouTube (mendukung Bhs. Indonesia).
-                        </p>
-                    </div>
-
-                    <div class="menu-item disabled">
-                        <div class="menu-header">
-                            <i class="bi bi-instagram"></i>
-                            <h3>Instagram Downloader</h3>
-                            <button class="btn-coba" disabled>Segera</button>
-                        </div>
-                        <p class="menu-description">
-                            Fitur ini sedang dalam pengembangan.
-                        </p>
-                    </div>
+                    <div class="menu-item"><div class="menu-header"><i class="bi bi-tiktok"></i><h3>TikTok Downloader</h3><button class="btn-coba" data-target="page-tiktok">Coba</button></div><p class="menu-description">Unduh video dan audio dari link TikTok tanpa watermark.</p></div>
+                    <div class="menu-item"><div class="menu-header"><i class="bi bi-youtube"></i><h3>YouTube Play</h3><button class="btn-coba" data-target="page-yt-play">Coba</button></div><p class="menu-description">Cari lagu atau video YouTube dan dapatkan link unduh MP3 & MP4.</p></div>
+                    <div class="menu-item"><div class="menu-header"><i class="bi bi-file-text-fill"></i><h3>Transkrip YouTube</h3><button class="btn-coba" data-target="page-yt-transcript">Coba</button></div><p class="menu-description">Ambil teks transkrip lengkap dari video YouTube.</p></div>
+                    <div class="menu-item"><div class="menu-header"><i class="bi bi-card-checklist"></i><h3>Peringkas YouTube</h3><button class="btn-coba" data-target="page-yt-summary">Coba</button></div><p class="menu-description">Buat ringkasan poin-poin penting dari video YouTube (mendukung Bhs. Indonesia).</p></div>
+                    <div class="menu-item disabled"><div class="menu-header"><i class="bi bi-instagram"></i><h3>Instagram Downloader</h3><button class="btn-coba" disabled>Segera</button></div><p class="menu-description">Fitur ini sedang dalam pengembangan.</p></div>
                 </div>
             </div>
         </section>
@@ -143,14 +75,23 @@
                 <h2><i class="bi bi-tiktok"></i> TikTok Downloader</h2>
                 <div class="feature-container">
                     <button class="btn-petunjuk" id="btn-petunjuk-tiktok"><i class="bi bi-question-circle"></i> Petunjuk</button>
-                    <div class="modal-petunjuk" id="modal-petunjuk-tiktok">... (Konten petunjuk tetap sama) ...</div>
+                    <div class="modal-petunjuk" id="modal-petunjuk-tiktok">
+                        <p><strong>Cara Penggunaan:</strong></p>
+                        <ol>
+                            <li>Buka aplikasi TikTok.</li>
+                            <li>Cari video yang ingin kamu unduh.</li>
+                            <li>Klik tombol "Bagikan" (Share).</li>
+                            <li>Pilih "Salin Tautan" (Copy Link).</li>
+                            <li>Tempel (paste) link tersebut di kotak di bawah ini.</li>
+                            <li>Klik tombol "Unduh".</li>
+                        </ol>
+                        <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-tiktok">Mengerti</button>
+                    </div>
                     <div class="input-grup">
                         <input type="text" id="tiktok-url" placeholder="Tempel link TikTok di sini...">
                         <button class="btn" id="btn-download-tiktok">Unduh</button>
                     </div>
-                    <div id="loading-spinner-tiktok" class="loading-spinner" style="display: none;">
-                        <div class="spinner"></div><span>Memproses...</span>
-                    </div>
+                    <div id="loading-spinner-tiktok" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Memproses...</span></div>
                     <div id="tiktok-results" class="results-container"></div>
                 </div>
             </div>
@@ -161,14 +102,22 @@
                 <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
                 <h2><i class="bi bi-youtube"></i> YouTube Play</h2>
                 <div class="feature-container">
-                    <p class="feature-subtext">Cari video/lagu (contoh: Laskar Pelangi).</p>
+                    <button class="btn-petunjuk" id="btn-petunjuk-yt-play"><i class="bi bi-question-circle"></i> Petunjuk</button>
+                    <div class="modal-petunjuk" id="modal-petunjuk-yt-play">
+                        <p><strong>Cara Penggunaan:</strong></p>
+                        <ol>
+                            <li>Ketik judul lagu atau video yang ingin kamu cari di kotak input.</li>
+                            <li>Contoh: "Laskar Pelangi"</li>
+                            <li>Klik tombol "Cari".</li>
+                            <li>Asisten akan mencari video yang paling relevan dan memberikan link unduh MP3 dan MP4.</li>
+                        </ol>
+                        <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-yt-play">Mengerti</button>
+                    </div>
                     <div class="input-grup">
                         <input type="text" id="yt-play-query" placeholder="Ketik judul lagu atau video...">
                         <button class="btn" id="btn-search-yt-play">Cari</button>
                     </div>
-                    <div id="loading-spinner-yt-play" class="loading-spinner" style="display: none;">
-                        <div class="spinner"></div><span>Mencari video...</span>
-                    </div>
+                    <div id="loading-spinner-yt-play" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Mencari video...</span></div>
                     <div id="yt-play-results" class="results-container"></div>
                 </div>
             </div>
@@ -179,14 +128,23 @@
                 <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
                 <h2><i class="bi bi-file-text-fill"></i> Transkrip YouTube</h2>
                 <div class="feature-container">
-                    <p class="feature-subtext">Tempel link video YouTube.</p>
+                    <button class="btn-petunjuk" id="btn-petunjuk-yt-transcript"><i class="bi bi-question-circle"></i> Petunjuk</button>
+                    <div class="modal-petunjuk" id="modal-petunjuk-yt-transcript">
+                        <p><strong>Cara Penggunaan:</strong></p>
+                        <ol>
+                            <li>Buka YouTube dan salin link video yang ingin kamu ambil transkripnya.</li>
+                            <li>Tempel (paste) link tersebut di kotak di bawah ini.</li>
+                            <li>Klik tombol "Ambil".</li>
+                            <li>Asisten akan menampilkan teks transkrip lengkap dari video tersebut.</li>
+                            <li><strong>Catatan:</strong> Fitur ini hanya berfungsi jika video memiliki transkrip.</li>
+                        </ol>
+                        <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-yt-transcript">Mengerti</button>
+                    </div>
                     <div class="input-grup">
                         <input type="text" id="yt-transcript-url" placeholder="Tempel link YouTube di sini...">
                         <button class="btn" id="btn-get-yt-transcript">Ambil</button>
                     </div>
-                    <div id="loading-spinner-yt-transcript" class="loading-spinner" style="display: none;">
-                        <div class="spinner"></div><span>Mengambil transkrip...</span>
-                    </div>
+                    <div id="loading-spinner-yt-transcript" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Mengambil transkrip...</span></div>
                     <div id="yt-transcript-results" class="results-container"></div>
                 </div>
             </div>
@@ -197,14 +155,23 @@
                 <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
                 <h2><i class="bi bi-card-checklist"></i> Peringkas YouTube</h2>
                 <div class="feature-container">
-                    <p class="feature-subtext">Tempel link video YouTube (pastikan ada transkrip ID).</p>
+                    <button class="btn-petunjuk" id="btn-petunjuk-yt-summary"><i class="bi bi-question-circle"></i> Petunjuk</button>
+                    <div class="modal-petunjuk" id="modal-petunjuk-yt-summary">
+                        <p><strong>Cara Penggunaan:</strong></p>
+                        <ol>
+                            <li>Buka YouTube dan salin link video yang ingin kamu ringkas.</li>
+                            <li>Tempel (paste) link tersebut di kotak di bawah ini.</li>
+                            <li>Klik tombol "Ringkas".</li>
+                            <li>Proses ini mungkin memakan waktu beberapa saat.</li>
+                            <li><strong>Catatan:</strong> Fitur ini hanya berfungsi jika video memiliki transkrip Bahasa Indonesia (id).</li>
+                        </ol>
+                        <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-yt-summary">Mengerti</button>
+                    </div>
                     <div class="input-grup">
                         <input type="text" id="yt-summary-url" placeholder="Tempel link YouTube di sini...">
                         <button class="btn" id="btn-get-yt-summary">Ringkas</button>
                     </div>
-                    <div id="loading-spinner-yt-summary" class="loading-spinner" style="display: none;">
-                        <div class="spinner"></div><span>Membuat ringkasan... Ini mungkin perlu waktu.</span>
-                    </div>
+                    <div id="loading-spinner-yt-summary" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Membuat ringkasan... Ini mungkin perlu waktu.</span></div>
                     <div id="yt-summary-results" class="results-container"></div>
                 </div>
             </div>
@@ -215,20 +182,8 @@
                 <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
                 <h2><i class="bi bi-bar-chart-line-fill"></i> Analitik</h2>
                 <div class="analytics-container">
-                    <div class="chart-box">
-                        <div class="chart-header">
-                            <h3>Pengunjung Harian (7 Hari Terakhir)</h3>
-                            <p>Total: <strong>1,234</strong> <span class="trend-up"><i class="bi bi-arrow-up-right"></i> +5.2%</span></p>
-                        </div>
-                        <canvas id="visitors-chart"></canvas>
-                    </div>
-                    <div class="chart-box">
-                        <div class="chart-header">
-                            <h3>Penggunaan Fitur (Bulan Ini)</h3>
-                            <p>Fitur terpopuler: <strong>TikTok Downloader</strong></p>
-                        </div>
-                        <canvas id="features-chart"></canvas>
-                    </div>
+                    <div class="chart-box"><div class="chart-header"><h3>Pengunjung Harian (7 Hari Terakhir)</h3><p>Total: <strong>1,234</strong> <span class="trend-up"><i class="bi bi-arrow-up-right"></i> +5.2%</span></p></div><canvas id="visitors-chart"></canvas></div>
+                    <div class="chart-box"><div class="chart-header"><h3>Penggunaan Fitur (Bulan Ini)</h3><p>Fitur terpopuler: <strong>TikTok Downloader</strong></p></div><canvas id="features-chart"></canvas></div>
                 </div>
             </div>
         </section>
