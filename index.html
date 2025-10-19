@@ -10,12 +10,8 @@
 </head>
 <body>
 
-    <div id="preloader">
-        <div class="spinner"></div>
-    </div>
-
+    <div id="preloader"><div class="spinner"></div></div>
     <div id="toast-container"></div>
-
     <button id="theme-toggle"><i class="bi bi-brightness-high-fill"></i><i class="bi bi-moon-stars-fill"></i></button>
     <button id="menu-toggle"><i class="bi bi-list"></i></button>
     <nav class="sidenav" id="sidenav">
@@ -28,14 +24,14 @@
         <a href="#" class="nav-link" data-target="page-yt-play"><i class="bi bi-youtube"></i> YouTube Play</a>
         <a href="#" class="nav-link" data-target="page-yt-transcript"><i class="bi bi-file-text-fill"></i> Transkrip YouTube</a>
         <a href="#" class="nav-link" data-target="page-yt-summary"><i class="bi bi-card-checklist"></i> Peringkas YouTube</a>
+        <a href="#" class="nav-link" data-target="page-spotify-search"><i class="bi bi-spotify"></i> Cari Spotify</a>
+        <a href="#" class="nav-link" data-target="page-spotify-download"><i class="bi bi-download"></i> Unduh Spotify</a>
     </nav>
     <div class="overlay" id="overlay"></div>
     <div class="cursor-light"></div>
     <div class="ocean">
         <div class="ship"><div class="sail"></div><div class="boat-body"></div></div>
-        <div class="wave wave1"></div>
-        <div class="wave wave2"></div>
-        <div class="wave wave3"></div>
+        <div class="wave wave1"></div><div class="wave wave2"></div><div class="wave wave3"></div>
     </div>
 
     <main>
@@ -63,8 +59,28 @@
                     <div class="menu-item"><div class="menu-header"><i class="bi bi-tiktok"></i><h3>TikTok Downloader</h3><button class="btn-coba" data-target="page-tiktok">Coba</button></div><p class="menu-description">Unduh video dan audio dari link TikTok tanpa watermark.</p></div>
                     <div class="menu-item"><div class="menu-header"><i class="bi bi-youtube"></i><h3>YouTube Play</h3><button class="btn-coba" data-target="page-yt-play">Coba</button></div><p class="menu-description">Cari lagu atau video YouTube dan dapatkan link unduh MP3 & MP4.</p></div>
                     <div class="menu-item"><div class="menu-header"><i class="bi bi-file-text-fill"></i><h3>Transkrip YouTube</h3><button class="btn-coba" data-target="page-yt-transcript">Coba</button></div><p class="menu-description">Ambil teks transkrip lengkap dari video YouTube.</p></div>
-                    <div class="menu-item"><div class="menu-header"><i class="bi bi-card-checklist"></i><h3>Peringkas YouTube</h3><button class="btn-coba" data-target="page-yt-summary">Coba</button></div><p class="menu-description">Buat ringkasan poin-poin penting dari video YouTube (mendukung Bhs. Indonesia).</p></div>
-                    <div class="menu-item disabled"><div class="menu-header"><i class="bi bi-instagram"></i><h3>Instagram Downloader</h3><button class="btn-coba" disabled>Segera</button></div><p class="menu-description">Fitur ini sedang dalam pengembangan.</p></div>
+                    <div class="menu-item"><div class="menu-header"><i class="bi bi-card-checklist"></i><h3>Peringkas YouTube</h3><button class="btn-coba" data-target="page-yt-summary">Coba</button></div><p class="menu-description">Buat ringkasan poin-poin penting dari video YouTube.</p></div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-header">
+                            <i class="bi bi-spotify"></i>
+                            <h3>Cari Spotify</h3>
+                            <button class="btn-coba" data-target="page-spotify-search">Coba</button>
+                        </div>
+                        <p class="menu-description">
+                            Cari informasi lagu, artis, dan album di Spotify berdasarkan judul.
+                        </p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-header">
+                            <i class="bi bi-download"></i>
+                            <h3>Unduh Spotify</h3>
+                            <button class="btn-coba" data-target="page-spotify-download">Coba</button>
+                        </div>
+                        <p class="menu-description">
+                            Unduh lagu (MP3) dan gambar sampul dari link URL Spotify.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -106,10 +122,10 @@
                     <div class="modal-petunjuk" id="modal-petunjuk-yt-play">
                         <p><strong>Cara Penggunaan:</strong></p>
                         <ol>
-                            <li>Ketik judul lagu atau video yang ingin kamu cari di kotak input.</li>
-                            <li>Contoh: "Laskar Pelangi"</li>
+                            <li>Ketik judul lagu atau video (contoh: "Laskar Pelangi").</li>
                             <li>Klik tombol "Cari".</li>
-                            <li>Asisten akan mencari video yang paling relevan dan memberikan link unduh MP3 dan MP4.</li>
+                            <li>Asisten akan mencari video dan memberikan link unduh MP3 & MP4.</li>
+                            <li><b>Peringatan:</b> Fitur ini mungkin gagal karena batasan API (CORS).</li>
                         </ol>
                         <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-yt-play">Mengerti</button>
                     </div>
@@ -132,11 +148,10 @@
                     <div class="modal-petunjuk" id="modal-petunjuk-yt-transcript">
                         <p><strong>Cara Penggunaan:</strong></p>
                         <ol>
-                            <li>Buka YouTube dan salin link video yang ingin kamu ambil transkripnya.</li>
-                            <li>Tempel (paste) link tersebut di kotak di bawah ini.</li>
+                            <li>Salin link video YouTube yang ingin kamu ambil transkripnya.</li>
+                            <li>Tempel link tersebut di kotak di bawah ini.</li>
                             <li>Klik tombol "Ambil".</li>
-                            <li>Asisten akan menampilkan teks transkrip lengkap dari video tersebut.</li>
-                            <li><strong>Catatan:</strong> Fitur ini hanya berfungsi jika video memiliki transkrip.</li>
+                            <li><b>Peringatan:</b> Fitur ini mungkin gagal karena batasan API (CORS).</li>
                         </ol>
                         <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-yt-transcript">Mengerti</button>
                     </div>
@@ -145,7 +160,8 @@
                         <button class="btn" id="btn-get-yt-transcript">Ambil</button>
                     </div>
                     <div id="loading-spinner-yt-transcript" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Mengambil transkrip...</span></div>
-                    <div id="yt-transcript-results" class="results-container"></div>
+                    <div id="yt-transcript-results" class="results-container">
+                        </div>
                 </div>
             </div>
         </section>
@@ -159,11 +175,10 @@
                     <div class="modal-petunjuk" id="modal-petunjuk-yt-summary">
                         <p><strong>Cara Penggunaan:</strong></p>
                         <ol>
-                            <li>Buka YouTube dan salin link video yang ingin kamu ringkas.</li>
-                            <li>Tempel (paste) link tersebut di kotak di bawah ini.</li>
+                            <li>Salin link video YouTube yang ingin kamu ringkas.</li>
+                            <li>Tempel link tersebut di kotak di bawah ini.</li>
                             <li>Klik tombol "Ringkas".</li>
-                            <li>Proses ini mungkin memakan waktu beberapa saat.</li>
-                            <li><strong>Catatan:</strong> Fitur ini hanya berfungsi jika video memiliki transkrip Bahasa Indonesia (id).</li>
+                            <li><b>Peringatan:</b> Fitur ini mungkin gagal karena batasan API (CORS).</li>
                         </ol>
                         <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-yt-summary">Mengerti</button>
                     </div>
@@ -171,8 +186,63 @@
                         <input type="text" id="yt-summary-url" placeholder="Tempel link YouTube di sini...">
                         <button class="btn" id="btn-get-yt-summary">Ringkas</button>
                     </div>
-                    <div id="loading-spinner-yt-summary" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Membuat ringkasan... Ini mungkin perlu waktu.</span></div>
-                    <div id="yt-summary-results" class="results-container"></div>
+                    <div id="loading-spinner-yt-summary" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Membuat ringkasan...</span></div>
+                    <div id="yt-summary-results" class="results-container">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" id="page-spotify-search">
+            <div class="content">
+                <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
+                <h2><i class="bi bi-spotify"></i> Cari Spotify</h2>
+                <div class="feature-container">
+                    <button class="btn-petunjuk" id="btn-petunjuk-spotify-search"><i class="bi bi-question-circle"></i> Petunjuk</button>
+                    <div class="modal-petunjuk" id="modal-petunjuk-spotify-search">
+                        <p><strong>Cara Penggunaan:</strong></p>
+                        <ol>
+                            <li>Ketik judul lagu atau artis yang ingin kamu cari.</li>
+                            <li>Contoh: "Serana" atau "For Revenge".</li>
+                            <li>Klik tombol "Cari".</li>
+                            <li>Asisten akan menampilkan daftar lagu yang relevan dari Spotify.</li>
+                        </ol>
+                        <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-spotify-search">Mengerti</button>
+                    </div>
+                    <div class="input-grup">
+                        <input type="text" id="spotify-search-query" placeholder="Ketik judul lagu atau artis...">
+                        <button class="btn" id="btn-search-spotify">Cari</button>
+                    </div>
+                    <div id="loading-spinner-spotify-search" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Mencari di Spotify...</span></div>
+                    <div id="spotify-search-results" class="results-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" id="page-spotify-download">
+            <div class="content">
+                <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
+                <h2><i class="bi bi-download"></i> Unduh Spotify</h2>
+                <div class="feature-container">
+                    <button class="btn-petunjuk" id="btn-petunjuk-spotify-download"><i class="bi bi-question-circle"></i> Petunjuk</button>
+                    <div class="modal-petunjuk" id="modal-petunjuk-spotify-download">
+                        <p><strong>Cara Penggunaan:</strong></p>
+                        <ol>
+                            <li>Buka Spotify (aplikasi atau web).</li>
+                            <li>Cari lagu yang ingin kamu unduh.</li>
+                            <li>Klik tombol "Bagikan" (Share).</li>
+                            <li>Pilih "Salin Tautan" (Copy Link).</li>
+                            <li>Tempel link tersebut di kotak di bawah ini.</li>
+                            <li>Klik tombol "Unduh".</li>
+                        </ol>
+                        <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-spotify-download">Mengerti</button>
+                    </div>
+                    <div class="input-grup">
+                        <input type="text" id="spotify-download-url" placeholder="Tempel link Spotify di sini...">
+                        <button class="btn" id="btn-download-spotify">Unduh</button>
+                    </div>
+                    <div id="loading-spinner-spotify-download" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Memproses link...</span></div>
+                    <div id="spotify-download-results" class="results-container"></div>
                 </div>
             </div>
         </section>
