@@ -1,4 +1,4 @@
-/* ... (Import Font, Variabel, Reset, Body - Tetap Sama) ... */
+/* ... (Import Font, Variabel, Reset - Tetap Sama) ... */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
 :root {
     --bg-color: #ffffff; --text-color: #1a1a1a; --primary-color: #007aff; --secondary-color: #f2f2f7; --border-color: #e0e0e0; --neon-glow: rgba(0, 122, 255, 0.5); --cursor-light-color: rgba(0, 122, 255, 0.15);
@@ -19,12 +19,13 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* (DIUBAH) Biar Halaman 1 bisa diatur padding-topnya */
+    justify-content: flex-start; 
     z-index: 10;
     padding-bottom: 150px;
 }
 
-/* ... (Preloader, Toast Notification, Efek Visual, Gelombang, Kapal - Tetap Sama) ... */
+/* ... (Preloader, Toast Notification, Efek Visual - Tetap Sama) ... */
 #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 2000; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s ease, visibility 0.5s ease; opacity: 1; visibility: visible; }
 #preloader.hidden { opacity: 0; visibility: hidden; }
 #preloader .spinner { width: 40px; height: 40px; border: 4px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -35,28 +36,81 @@ main {
 .toast.error { background-color: #ff3b30; color: #ffffff; }
 .toast.info { background-color: var(--secondary-color); color: var(--text-color); border: 1px solid var(--border-color); }
 .cursor-light { position: fixed; top: 0; left: 0; width: 500px; height: 500px; background: radial-gradient(circle, var(--cursor-light-color) 0%, transparent 60%); pointer-events: none; transform: translate(-50%, -50%); z-index: 1; transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1); filter: blur(30px); opacity: 0.8; }
-.ocean { position: fixed; bottom: 0; left: 0; width: 100%; height: 150px; z-index: 5; overflow: hidden; pointer-events: none; }
-.wave { background: var(--wave-color); border-radius: 1000% 1000% 0 0; position: absolute; width: 200%; animation: wave-animation 10s linear infinite; }
-.wave.wave1 { animation-duration: 8s; height: 100px; bottom: 0; }
-.wave.wave2 { animation-duration: 12s; height: 120px; bottom: 0; }
-.wave.wave3 { animation-duration: 10s; height: 100px; bottom: 5px; }
-@keyframes wave-animation { 0% { transform: translateX(-50%); } 100% { transform: translateX(0%); } }
-.ship { position: absolute; bottom: 80px; left: 50%; width: 80px; height: 50px; z-index: 6; animation: ship-bob 3s ease-in-out infinite, ship-sail 30s linear infinite; }
-@keyframes ship-bob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-15px) rotate(2deg); } }
-@keyframes ship-sail { 0% { left: -100px; } 100% { left: 100%; } }
-.boat-body { width: 80px; height: 25px; background: #8B4513; border-radius: 5px 5px 20px 20px; position: absolute; bottom: 0; }
-.sail { width: 4px; height: 40px; background: #a0522d; position: absolute; left: 38px; bottom: 25px; }
-.sail::after { content: ''; width: 30px; height: 35px; background: var(--secondary-color); border: 1px solid var(--border-color); position: absolute; left: 4px; bottom: 0; clip-path: polygon(0 0, 100% 50%, 0 100%); }
 
-/* ... (Tombol, Sidenav, Sistem Halaman, H1, H2 - Tetap Sama) ... */
+/* (DIUBAH) Animasi Gelombang SVG Baru */
+.ocean {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px; /* Tinggi area ombak */
+    z-index: 5;
+    overflow: hidden;
+    pointer-events: none;
+}
+.waves-svg {
+    width: 100%;
+    height: 100%;
+    /* Atur agar SVG mengisi dari bawah */
+    position: absolute;
+    bottom: -1px; 
+    left: 0;
+}
+.wave-container > use {
+    animation: move-wave 25s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+.wave-container > use:nth-child(1) {
+    animation-delay: -2s;
+    animation-duration: 7s;
+}
+.wave-container > use:nth-child(2) {
+    animation-delay: -4s;
+    animation-duration: 10s;
+}
+.wave-container > use:nth-child(3) {
+    animation-delay: -5s;
+    animation-duration: 13s;
+}
+@keyframes move-wave {
+    0% { transform: translateX(-90px); }
+    100% { transform: translateX(85px); }
+}
+
+/* (DIHAPUS) CSS Kapal (.ship, .boat-body, .sail, @keyframes) */
+
+/* ==================
+   TOMBOL & KONTROL
+   ================== */
+/* ... (Tombol Navigasi Tetap Sama) ... */
 #menu-toggle { position: fixed; top: 20px; left: 20px; background: var(--secondary-color); border: 1px solid var(--border-color); color: var(--primary-color); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 1002; font-size: 24px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
 #theme-toggle { position: fixed; top: 20px; right: 20px; background: var(--secondary-color); border: 1px solid var(--border-color); color: var(--primary-color); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 1001; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
 #menu-toggle:hover, #theme-toggle:hover { box-shadow: 0 0 20px var(--neon-glow); transform: scale(1.1); }
 .dark-mode #theme-toggle .bi-brightness-high-fill { display: none; }
 body:not(.dark-mode) #theme-toggle .bi-moon-stars-fill { display: none; }
-.btn { background-color: var(--primary-color); color: var(--bg-color); font-weight: 500; font-size: 16px; padding: 12px 24px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
-.btn:hover, .btn:focus { transform: translateY(-3px); box-shadow: 0 6px 25px var(--neon-glow); }
-.btn:active { transform: translateY(1px) scale(0.98); box-shadow: 0 2px 10px var(--neon-glow); }
+
+/* (DIUBAH) Animasi Tombol "Popup" */
+.btn {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    font-weight: 500;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-out; /* Transisi lebih cepat */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+.btn:hover, .btn:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px var(--neon-glow);
+}
+.btn:active {
+    transform: scale(1.05); /* Efek "Popup" */
+    box-shadow: 0 8px 30px var(--neon-glow); /* Glow lebih besar */
+}
+
+/* ... (Sidenav, Sistem Halaman, H1, H2 - Tetap Sama) ... */
 .sidenav { position: fixed; top: 0; left: 0; width: 280px; height: 100vh; background: var(--secondary-color); border-right: 1px solid var(--border-color); z-index: 1003; display: flex; flex-direction: column; padding: 20px; transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1); }
 .sidenav.active { transform: translateX(0); }
 .sidenav-header { padding: 10px 0 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; }
@@ -77,9 +131,13 @@ h1 { font-size: 3rem; font-weight: 700; margin-bottom: 24px; color: var(--text-c
 h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--primary-color); text-align: left; padding-bottom: 10px; border-bottom: 2px solid var(--border-color); }
 
 /* ==================
-   HALAMAN 1: HOME (Perbaikan Bug Layout)
+   HALAMAN 1: HOME (PERBAIKAN BUG)
    ================== */
-#page-welcome .content { padding-top: 10vh; padding-bottom: 10vh; }
+/* (DIUBAH) Atur padding Halaman 1 */
+#page-welcome .content {
+    padding-top: 10vh;
+    padding-bottom: 5vh;
+}
 .device-info-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -95,23 +153,14 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
     display: flex;
     flex-direction: column;
     transition: all 0.3s ease;
-    /* (PERBAIKAN) Menambahkan flex-basis agar tidak terpengaruh input lain */
-    flex-basis: auto; 
 }
 .info-box:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05); }
 .info-box i { font-size: 24px; color: var(--primary-color); margin-bottom: 12px; }
 .info-box strong { font-size: 14px; color: var(--text-color); opacity: 0.7; margin-bottom: 4px; }
 .info-box span { font-size: 16px; font-weight: 500; word-wrap: break-word; }
 
-/* ==================
-   HALAMAN 2: MENU (Perbaikan Tombol Berdempetan)
-   ================== */
-#page-menu .btn-back {
-    text-align: left;
-    padding: 0;
-    margin-bottom: 16px;
-}
-/* ... (Style Menu lainnya tetap sama) ... */
+/* ... (Halaman Menu, Halaman Fitur Umum, Tombol Copy, Hasil, dll - Tetap Sama) ... */
+#page-menu .btn-back { text-align: left; padding: 0; margin-bottom: 16px; }
 .menu-list { display: flex; flex-direction: column; gap: 16px; text-align: left; }
 .menu-item { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; transition: all 0.3s ease; }
 .menu-item.disabled { opacity: 0.6; }
@@ -119,18 +168,14 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
 .menu-header { display: flex; align-items: center; gap: 12px; cursor: pointer; }
 .menu-header i { font-size: 24px; color: var(--primary-color); }
 .menu-header h3 { flex-grow: 1; font-size: 1.25rem; }
-.btn-coba { background: var(--primary-color); color: var(--bg-color); font-size: 14px; padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+.btn-coba { background: var(--primary-color); color: var(--bg-color); font-size: 14px; padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease-out; }
 .btn-coba:hover { transform: scale(1.05); }
 .btn-coba:disabled { background: #888; cursor: not-allowed; }
 .menu-description { margin-top: 12px; margin-left: 36px; font-size: 15px; opacity: 0.8; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, margin-top 0.4s ease-out; }
 .menu-item.active .menu-description { max-height: 100px; margin-top: 12px; }
-
-/* ==================
-   HALAMAN FITUR (UMUM)
-   ================== */
 .btn-back { background: none; border: none; color: var(--primary-color); font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; text-align: left; padding: 0; margin-bottom: 16px; }
 .btn-back:hover { text-decoration: underline; }
-.feature-container { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-top: 16px; text-align: left; position: relative; } /* (BARU) Tambah position relative */
+.feature-container { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-top: 16px; text-align: left; position: relative; }
 .feature-subtext { font-size: 15px; opacity: 0.8; margin-bottom: 16px; text-align: left; }
 .btn-petunjuk { background: none; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
 .modal-petunjuk { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-bottom: 16px; display: none; animation: fadeIn 0.3s ease; }
@@ -146,81 +191,82 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
 .spinner { width: 24px; height: 24px; border: 3px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .results-container { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
-.result-item { background: var(--bg-color); padding: 16px; border: 1px solid var(--border-color); border-radius: 8px; position: relative; } /* (BARU) Tambah position relative */
+.result-item { background: var(--bg-color); padding: 16px; border: 1px solid var(--border-color); border-radius: 8px; position: relative; }
 .result-item h4 { margin-bottom: 8px; font-size: 1.1rem; }
 .result-item p { font-size: 14px; opacity: 0.8; margin-bottom: 12px; }
 .result-item .download-links { display: flex; flex-wrap: wrap; gap: 10px; }
-.result-item .download-links a { background: var(--primary-color); color: var(--bg-color); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
+.result-item .download-links a { background: var(--primary-color); color: var(--bg-color); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 500; transition: all 0.2s ease-out; }
 .result-item .download-links a:hover { transform: scale(1.05); box-shadow: 0 4px 15px var(--neon-glow); }
 .error-message { color: #ff3b30; background: rgba(255, 59, 48, 0.1); border: 1px solid #ff3b30; padding: 12px; border-radius: 8px; }
-
-/* (BARU) Tombol Copy */
-.btn-copy {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: var(--secondary-color);
-    color: var(--primary-color);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+.btn-copy { position: absolute; top: 12px; right: 12px; background: var(--secondary-color); color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 4px 8px; font-size: 12px; cursor: pointer; transition: all 0.2s ease; }
 .btn-copy:hover { background: var(--primary-color); color: var(--bg-color); }
 .btn-copy:active { transform: scale(0.95); }
-
-/* ... (Style Transcript & Summary Box - Tetap Sama, tapi tambah position relative) ... */
 .transcript-box { position: relative; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; max-height: 400px; overflow-y: auto; text-align: left; white-space: pre-wrap; line-height: 1.7; }
-.transcript-box h4 { margin-bottom: 12px; padding-right: 60px; } /* Beri ruang untuk tombol copy */
+.transcript-box h4 { margin-bottom: 12px; padding-right: 60px; }
 .summary-box { position: relative; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; text-align: left; line-height: 1.7; }
 .summary-box h4 { margin-bottom: 12px; padding-right: 60px; }
 .summary-box h5 { font-size: 1.1rem; color: var(--primary-color); margin-top: 16px; margin-bottom: 8px; }
 .summary-box p, .summary-box li { font-size: 15px; opacity: 0.9; }
+.spotify-result-item { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; display: flex; gap: 12px; align-items: center; }
+.spotify-result-item img { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; }
+.spotify-result-item .info { text-align: left; flex-grow: 1; }
+.spotify-result-item .info h4 { font-size: 1rem; font-weight: 500; margin-bottom: 2px; }
+.spotify-result-item .info p { font-size: 14px; opacity: 0.7; margin-bottom: 0; }
+.spotify-result-item .actions { display: flex; flex-direction: column; gap: 8px; }
+.spotify-result-item .actions a { font-size: 20px; color: var(--primary-color); text-decoration: none; transition: all 0.2s ease; }
+.spotify-result-item .actions a:hover { transform: scale(1.1); }
 
-/* (BARU) Style Hasil Spotify */
-.spotify-result-item {
+/* (BARU) Style untuk Halaman Fitur Gambar */
+.input-grid-col-2, .input-grid-col-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+.input-grid-col-3 {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+.input-grid-col-2 label, .input-grid-col-3 label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+.input-grid-col-2 input, .input-grid-col-3 input, .input-grid-col-3 select {
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 8px;
+    width: 100%;
+}
+.input-grid-col-3 input[type="color"] {
+    padding: 2px; /* Pengecualian untuk color picker */
+    height: 40px;
+}
+.feature-container .btn {
+    width: 100%; /* Tombol "Buat" jadi full-width */
+    margin-top: 10px;
+}
+.image-result-box {
+    margin-top: 20px;
+    padding: 10px;
     background: var(--bg-color);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 12px;
     display: flex;
-    gap: 12px;
+    justify-content: center;
     align-items: center;
 }
-.spotify-result-item img {
-    width: 60px;
-    height: 60px;
-    border-radius: 6px;
-    object-fit: cover;
+.image-result-box img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
 }
-.spotify-result-item .info {
-    text-align: left;
-    flex-grow: 1;
-}
-.spotify-result-item .info h4 {
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 2px;
-}
-.spotify-result-item .info p {
-    font-size: 14px;
-    opacity: 0.7;
-    margin-bottom: 0;
-}
-.spotify-result-item .actions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.spotify-result-item .actions a {
-    font-size: 20px;
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-.spotify-result-item .actions a:hover { transform: scale(1.1); }
+
 
 /* ... (Halaman Analitik & Footer - Tetap Sama) ... */
 .analytics-container { display: grid; grid-template-columns: 1fr; gap: 24px; text-align: left; }
@@ -243,24 +289,26 @@ footer { width: 100%; text-align: center; padding: 20px; font-weight: 300; font-
     .content { padding: 10px; }
     #theme-toggle { top: 15px; right: 15px; }
     #menu-toggle { top: 15px; left: 15px; }
-    #page-welcome .content { min-height: 80vh; justify-content: center; display: flex; flex-direction: column; padding-top: 5vh; }
-    .ocean { height: 100px; }
-    .ship { transform: scale(0.7); bottom: 60px; } /* Kapal HP Tetap Ada */
-
-    /* (PERBAIKAN) Tombol Berdempetan */
-    #page-menu .btn-back {
-        margin-top: 50px; /* Beri jarak dari tombol hamburger */
-        margin-bottom: 8px;
+    /* (DIUBAH) Perbaikan centering Halaman 1 */
+    #page-welcome .content {
+        padding-top: 15vh;
+        padding-bottom: 5vh;
     }
+    #page-menu .btn-back { margin-top: 50px; margin-bottom: 8px; }
 }
 
 @media (max-width: 600px) {
-    /* (PERBAIKAN) Bug Layout HP */
+    /* (PERBAIKAN BUG) Bug Layout HP */
     .device-info-grid {
         grid-template-columns: 1fr 1fr; /* Paksa 2 kolom */
+        grid-auto-rows: 1fr; /* (PENTING) Paksa semua kotak sama tinggi */
     }
     .info-box {
-        flex-basis: 45%; /* Pastikan ukurannya tetap */
-        flex-grow: 0;
+        /* Hapus flex-basis/grow yg salah dari sebelumnya */
+    }
+    
+    /* (BARU) Atur grid input fitur gambar */
+    .input-grid-col-2, .input-grid-col-3 {
+        grid-template-columns: 1fr; /* Jadi 1 kolom di HP */
     }
 }
