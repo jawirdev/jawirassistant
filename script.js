@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (preloader) preloader.classList.add('hidden');
 
     // ==================================
-    // SELEKTOR ELEMEN (Diperbarui)
+    // SELEKTOR ELEMEN (Dihapus Image-Gen)
     // ==================================
     const themeToggle = document.getElementById('theme-toggle');
     const cursorLight = document.querySelector('.cursor-light');
@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCoba = document.querySelectorAll('.btn-coba');
     const btnBack = document.querySelectorAll('.btn-back');
 
-    // ... (Selektor Halaman 1, 3, 4, 5, 6, 7, 8 Tetap Sama) ...
     // Halaman 1 (Info Device)
     const infoTime = document.getElementById('info-time');
     const infoDevice = document.getElementById('info-device');
@@ -58,16 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const spotifyDownloadUrlInput = document.getElementById('spotify-download-url');
     const btnDownloadSpotify = document.getElementById('btn-download-spotify');
     const loadingSpinnerSpotifyDownload = document.getElementById('loading-spinner-spotify-download');
-
-    // (BARU) Halaman 10 (Image Gen)
-    const imageGenText = document.getElementById('image-gen-text');
-    const imageGenBg = document.getElementById('image-gen-bg');
-    const imageGenColor = document.getElementById('image-gen-color');
-    const imageGenEmoji = document.getElementById('image-gen-emoji');
-    const btnGenerateImage = document.getElementById('btn-generate-image');
-    const loadingSpinnerImageGen = document.getElementById('loading-spinner-image-gen');
-
-    // (BARU) Halaman 11 (iPhone Quote)
+    
+    // Halaman 9 (iPhone Quote)
     const iphoneQuoteText = document.getElementById('iphone-quote-text');
     const iphoneQuoteTime = document.getElementById('iphone-quote-time');
     const iphoneQuoteCarrier = document.getElementById('iphone-quote-carrier');
@@ -76,13 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnGenerateIphoneQuote = document.getElementById('btn-generate-iphone-quote');
     const loadingSpinnerIphoneQuote = document.getElementById('loading-spinner-iphone-quote');
 
-    // Halaman 12 (Analitik)
+    // Halaman 10 (Analitik)
     let visitorsChartInstance = null;
     let featuresChartInstance = null;
 
     // Selektor Petunjuk
     const btnsPetunjuk = document.querySelectorAll('.btn-petunjuk');
     const btnsTutupPetunjuk = document.querySelectorAll('.btn-tutup-petunjuk');
+
 
     // ... (Fungsi Toast, Navigasi, Mode Gelap, Efek Visual, Info Device, Menu, Petunjuk, Copy - Tetap Sama) ...
     function showToast(message, type = 'info') { const toast = document.createElement('div'); toast.classList.add('toast', type); toast.textContent = message; toastContainer.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; setTimeout(() => toast.remove(), 300); }, 3000); }
@@ -138,42 +130,29 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayError(message, containerId) { const container = document.getElementById(containerId); if (container) { container.innerHTML = `<div class="error-message">${message}</div>`; } }
 
     // ==================================
-    // (BARU) FUNGSI API (UMUM - GAMBAR)
+    // FUNGSI API (UMUM - GAMBAR) (Diperbarui)
     // ==================================
-    /**
-     * Fungsi fetch API khusus untuk hasil gambar (blob)
-     */
-    async function fetchImageApi(url, resultsContainerId, spinnerElement, displayFunction) {
+    async function fetchImageApi(url, resultsContainerId, spinnerElement, displayFunction, fileName) {
         const resultsContainer = document.getElementById(resultsContainerId);
         resultsContainer.innerHTML = '';
         spinnerElement.style.display = 'flex';
-
         try {
             const response = await fetch(url);
-            
-            // Cek jika Tipe Konten adalah gambar
             if (response.ok && response.headers.get('Content-Type')?.includes('image')) {
                 const blob = await response.blob();
                 const imgUrl = URL.createObjectURL(blob);
-                displayFunction(imgUrl, resultsContainerId);
+                // (DIUBAH) Kirim fileName ke fungsi display
+                displayFunction(imgUrl, resultsContainerId, fileName); 
                 showToast('Gambar berhasil dibuat!', 'success');
             } else {
-                // Jika bukan gambar, coba baca sebagai JSON (untuk pesan error)
                 let errorMsg = `Error Jaringan: ${response.status}`;
-                try {
-                    const errData = await response.json();
-                    errorMsg = errData.message || errData.msg || errorMsg;
-                } catch (e) {
-                    // Biarkan errorMsg default
-                }
+                try { const errData = await response.json(); errorMsg = errData.message || errData.msg || errorMsg;
+                } catch (e) { /* Biarkan errorMsg default */ }
                 throw new Error(errorMsg);
             }
         } catch (error) {
             console.error('Error fetching Image API:', error);
-            let userMessage = error.message.includes('Failed to fetch') 
-                ? 'Gagal terhubung ke API. (CORS atau API offline)' 
-                : `Gagal: ${error.message}`;
-            
+            let userMessage = error.message.includes('Failed to fetch') ? 'Gagal terhubung ke API. (CORS atau API offline)' : `Gagal: ${error.message}`;
             displayError(userMessage, resultsContainerId);
             showToast(userMessage, 'error');
         } finally {
@@ -182,61 +161,147 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     /**
-     * (BARU) Fungsi untuk menampilkan hasil gambar
+     * (DIUBAH) Fungsi untuk menampilkan hasil gambar + tombol download
      */
-    function displayImageResult(imgUrl, containerId) {
+    function displayImageResult(imgUrl, containerId, fileName = 'gambar.png') {
         const container = document.getElementById(containerId);
-        container.innerHTML = `<img src="${imgUrl}" alt="Hasil Gambar">`;
+        container.innerHTML = `
+            <img src="${imgUrl}" alt="Hasil Gambar">
+            <a href="${imgUrl}" download="${fileName}" class="download-btn">
+                <i class="bi bi-download"></i> Unduh Gambar
+            </a>
+        `;
     }
 
-
-    // ... (Fungsi Halaman 3, 4, 5, 6, 7, 8 - Tetap Sama) ...
-    // Halaman 3: TikTok
-    btnDownloadTiktok.addEventListener('click', () => { const url = tiktokUrlInput.value.trim(); if (!url) { showToast('Silakan masukkan URL TikTok.', 'error'); return; } const apiUrl = `https://api.siputzx.my.id/api/d/tiktok/v2?url=${encodeURIComponent(url)}`; fetchApi(apiUrl, 'tiktok-results', loadingSpinnerTiktok, displayTikTokResults); });
-    function displayTikTokResults(data, containerId) { const container = document.getElementById(containerId); const metadata = data.metadata; const downloads = data.download; let title = metadata.title || metadata.description || 'Video TikTok'; if (title.length > 100) title = title.substring(0, 100) + '...'; let downloadLinksHTML = ''; if (downloads.video && downloads.video.length > 0) { downloads.video.forEach((videoUrl, index) => { let qualityLabel = `Video ${index + 1}`; if (videoUrl.includes('original')) qualityLabel = 'Video Original (HD)'; downloadLinksHTML += `<a href="${videoUrl}" target="_blank" download>Unduh ${qualityLabel}</a>`; }); } else { downloadLinksHTML = '<p>Tidak ada link video yang ditemukan.</p>'; } container.innerHTML = `<div class="result-item"><h4>${title}</h4><p><i class="bi bi-play-circle"></i> ${metadata.stats.playCount.toLocaleString('id-ID')} | <i class="bi bi-heart"></i> ${metadata.stats.likeCount.toLocaleString('id-ID')}</p><div class="download-links">${downloadLinksHTML}</div></div>`; }
-    // Halaman 4: YT Play
-    btnSearchYtPlay.addEventListener('click', () => { const query = ytPlayQueryInput.value.trim(); if (!query) { showToast('Silakan masukkan judul video.', 'error'); return; } const apiUrl = `https://api.zenzxz.my.id/api/search/play?query=${encodeURIComponent(query)}`; fetchApi(apiUrl, 'yt-play-results', loadingSpinnerYtPlay, displayYouTubePlayResults); });
-    function displayYouTubePlayResults(data, containerId) { const container = document.getElementById(containerId); const metadata = data.metadata; container.innerHTML = `<div class="result-item"><h4>${metadata.title}</h4><p><i class="bi bi-person-circle"></i> ${metadata.channel || 'Tidak diketahui'} | <i class="bi bi-clock-history"></i> ${metadata.duration || 'N/A'}</p><div class="download-links"><a href="${data.dl_mp3}" target="_blank" download>Unduh MP3</a><a href="${data.dl_mp4}" target="_blank" download>Unduh MP4</a></div></div>`; }
-    // Halaman 5: YT Transcript
-    btnGetYtTranscript.addEventListener('click', () => { const url = ytTranscriptUrlInput.value.trim(); if (!url) { showToast('Silakan masukkan URL YouTube.', 'error'); return; } const apiUrl = `https://api.zenzxz.my.id/api/tools/ytranscript?url=${encodeURIComponent(url)}`; fetchApi(apiUrl, 'yt-transcript-results', loadingSpinnerYtTranscript, displayTranscriptResults); });
-    function displayTranscriptResults(data, containerId) { const container = document.getElementById(containerId); const textId = "transcript-text-1"; container.innerHTML = `<div class="transcript-box"><button class="btn-copy" data-target="${textId}"><i class="bi bi-clipboard"></i> Salin</button><h4>${data.title}</h4><p id="${textId}">${data.transcript}</p></div>`; }
-    // Halaman 6: YT Summary
-    btnGetYtSummary.addEventListener('click', () => { const url = ytSummaryUrlInput.value.trim(); if (!url) { showToast('Silakan masukkan URL YouTube.', 'error'); return; } const apiUrl = `https://api.zenzxz.my.id/api/tools/ytsummarizer?url=${encodeURIComponent(url)}&lang=id`; fetchApi(apiUrl, 'yt-summary-results', loadingSpinnerYtSummary, displaySummaryResults); });
-    function displaySummaryResults(data, containerId) { const container = document.getElementById(containerId); const textId = "summary-text-1"; let content = data.content.replace(/<br\s*\/?>/gi, '\n'); content = content.replace(/<\/?(h1|h2|h3|h4|h5|b|strong|p|ul|li|ol)>/gi, ''); if (content.includes('Poin Kunci:')) { content = content.replace('Poin Kunci:', '<h5>Poin Kunci:</h5><ul>') + '</ul>'; content = content.replace(/\*\* (.*?)\n/g, '<li><strong>$1</strong></li>'); } container.innerHTML = `<div class="summary-box"><button class="btn-copy" data-target="${textId}"><i class="bi bi-clipboard"></i> Salin</button><div id="${textId}">${content}</div></div>`; }
-    // Halaman 7: Spotify Search
-    btnSearchSpotify.addEventListener('click', () => { const query = spotifySearchQueryInput.value.trim(); if (!query) { showToast('Silakan masukkan judul lagu atau artis.', 'error'); return; } const apiUrl = `https://api.siputzx.my.id/api/s/spotify?query=${encodeURIComponent(query)}`; fetchApi(apiUrl, 'spotify-search-results', loadingSpinnerSpotifySearch, displaySpotifySearchResults); });
-    function displaySpotifySearchResults(data, containerId) { const container = document.getElementById(containerId); if (!data || data.length === 0) { displayError("Tidak ada hasil ditemukan.", containerId); return; } let html = ''; data.forEach(track => { html += `<div class="spotify-result-item"><img src="${track.thumbnail}" alt="Album Art"><div class="info"><h4>${track.title}</h4><p>${track.artist} • ${track.album}</p><p><i class="bi bi-calendar-event"></i> ${track.release_date} | <i class="bi bi-clock"></i> ${track.duration}</p></div><div class="actions"><a href="${track.track_url}" target="_blank" title="Buka di Spotify"><i class="bi bi-spotify"></i></a></div></div>`; }); container.innerHTML = html; }
-    // Halaman 8: Spotify Download
-    btnDownloadSpotify.addEventListener('click', () => { const url = spotifyDownloadUrlInput.value.trim(); if (!url) { showToast('Silakan masukkan URL Spotify.', 'error'); return; } const apiUrl = `https://api.siputzx.my.id/api/d/spotifyv2?url=${encodeURIComponent(url)}`; fetchApi(apiUrl, 'spotify-download-results', loadingSpinnerSpotifyDownload, displaySpotifyDownloadResults); });
-    function displaySpotifyDownloadResults(data, containerId) { const container = document.getElementById(containerId); container.innerHTML = `<div class="result-item"><img src="${data.coverImage}" alt="Album Art" style="width: 80px; height: 80px;"><div class="info" style="text-align: left; flex-grow: 1;"><h4>${data.songTitle}</h4><p>${data.artist}</p></div></div><div class="result-item" style="margin-top: 10px;"><div class="download-links" style="width: 100%; justify-content: center;"><a href="${data.mp3DownloadLink}" target="_blank" download>Unduh MP3</a><a href="${data.coverDownloadLink}" target="_blank" download>Unduh Sampul</a></div></div>`; }
-
     // ==================================
-    // (BARU) FUNGSI HALAMAN 10: TEXT TO IMAGE
+    // FUNGSI HALAMAN 3: TIKTOK (Diperbarui)
     // ==================================
-    btnGenerateImage.addEventListener('click', () => {
-        const text = imageGenText.value;
-        const bg = imageGenBg.value.replace('#', ''); // Hapus #
-        const color = imageGenColor.value.replace('#', ''); // Hapus #
-        const emoji = imageGenEmoji.value;
-
-        if (!text) {
-            showToast('Teks tidak boleh kosong.', 'error');
-            return;
+    btnDownloadTiktok.addEventListener('click', () => {
+        const url = tiktokUrlInput.value.trim();
+        if (!url) { showToast('Silakan masukkan URL TikTok.', 'error'); return; }
+        const apiUrl = `https://api.siputzx.my.id/api/d/tiktok/v2?url=${encodeURIComponent(url)}`;
+        fetchApi(apiUrl, 'tiktok-results', loadingSpinnerTiktok, displayTikTokResults);
+    });
+    function displayTikTokResults(data, containerId) {
+        const container = document.getElementById(containerId);
+        const metadata = data.metadata;
+        const downloads = data.download;
+        let title = metadata.title || metadata.description || 'Video TikTok';
+        if (title.length > 100) title = title.substring(0, 100) + '...';
+        
+        let videoUrl = (downloads.video && downloads.video.length > 0) ? downloads.video[0] : '';
+        let downloadLinksHTML = '';
+        if (downloads.video && downloads.video.length > 0) {
+            downloads.video.forEach((url, index) => {
+                let qualityLabel = `Video ${index + 1}`;
+                if (url.includes('original')) qualityLabel = 'Video Original (HD)';
+                downloadLinksHTML += `<a href="${url}" target="_blank" download>Unduh ${qualityLabel}</a>`;
+            });
+        } else {
+            downloadLinksHTML = '<p>Tidak ada link video yang ditemukan.</p>';
         }
 
-        const params = new URLSearchParams({
-            text: text,
-            background: bg,
-            color: color,
-            emojiStyle: emoji
-        });
-        
-        const apiUrl = `https://brat.siputzx.my.id/image?${params.toString()}`;
-        fetchImageApi(apiUrl, 'image-gen-results', loadingSpinnerImageGen, displayImageResult);
-    });
+        container.innerHTML = `
+            <div class="result-item">
+                <h4>${title}</h4>
+                <p><i class="bi bi-play-circle"></i> ${metadata.stats.playCount.toLocaleString('id-ID')} | <i class="bi bi-heart"></i> ${metadata.stats.likeCount.toLocaleString('id-ID')}</p>
+                
+                ${videoUrl ? `
+                <div class="media-player-box">
+                    <video controls src="${videoUrl}" type="video/mp4" preload="metadata"></video>
+                </div>
+                ` : ''}
+
+                <div class="download-links">${downloadLinksHTML}</div>
+            </div>`;
+    }
 
     // ==================================
-    // (BARU) FUNGSI HALAMAN 11: IPHONE QUOTE
+    // FUNGSI HALAMAN 4: YT PLAY (Diperbarui)
+    // ==================================
+    btnSearchYtPlay.addEventListener('click', () => {
+        const query = ytPlayQueryInput.value.trim();
+        if (!query) { showToast('Silakan masukkan judul video.', 'error'); return; }
+        const apiUrl = `https://api.zenzxz.my.id/api/search/play?query=${encodeURIComponent(query)}`;
+        fetchApi(apiUrl, 'yt-play-results', loadingSpinnerYtPlay, displayYouTubePlayResults);
+    });
+    function displayYouTubePlayResults(data, containerId) {
+        const container = document.getElementById(containerId);
+        const metadata = data.metadata;
+        container.innerHTML = `
+            <div class="result-item">
+                <h4>${metadata.title}</h4>
+                <p><i class="bi bi-person-circle"></i> ${metadata.channel || 'Tidak diketahui'} | <i class="bi bi-clock-history"></i> ${metadata.duration || 'N/A'}</p>
+                
+                <div class="media-player-box">
+                    <strong>Audio:</strong>
+                    <audio controls src="${data.dl_mp3}" type="audio/mpeg" preload="metadata"></audio>
+                </div>
+                <div class="media-player-box">
+                    <strong>Video:</strong>
+                    <video controls src="${data.dl_mp4}" type="video/mp4" preload="metadata"></video>
+                </div>
+
+                <div class="download-links">
+                    <a href="${data.dl_mp3}" target="_blank" download>Unduh MP3</a>
+                    <a href="${data.dl_mp4}" target="_blank" download>Unduh MP4</a>
+                </div>
+            </div>`;
+    }
+
+    // ==================================
+    // FUNGSI HALAMAN 5: YT TRANSCRIPT (Tetap)
+    // ==================================
+    btnGetYtTranscript.addEventListener('click', () => { const url = ytTranscriptUrlInput.value.trim(); if (!url) { showToast('Silakan masukkan URL YouTube.', 'error'); return; } const apiUrl = `https://api.zenzxz.my.id/api/tools/ytranscript?url=${encodeURIComponent(url)}`; fetchApi(apiUrl, 'yt-transcript-results', loadingSpinnerYtTranscript, displayTranscriptResults); });
+    function displayTranscriptResults(data, containerId) { const container = document.getElementById(containerId); const textId = "transcript-text-1"; container.innerHTML = `<div class="transcript-box"><button class="btn-copy" data-target="${textId}"><i class="bi bi-clipboard"></i> Salin</button><h4>${data.title}</h4><p id="${textId}">${data.transcript}</p></div>`; }
+
+    // ==================================
+    // FUNGSI HALAMAN 6: YT SUMMARY (Tetap)
+    // ==================================
+    btnGetYtSummary.addEventListener('click', () => { const url = ytSummaryUrlInput.value.trim(); if (!url) { showToast('Silakan masukkan URL YouTube.', 'error'); return; } const apiUrl = `https://api.zenzxz.my.id/api/tools/ytsummarizer?url=${encodeURIComponent(url)}&lang=id`; fetchApi(apiUrl, 'yt-summary-results', loadingSpinnerYtSummary, displaySummaryResults); });
+    function displaySummaryResults(data, containerId) { const container = document.getElementById(containerId); const textId = "summary-text-1"; let content = data.content.replace(/<br\s*\/?>/gi, '\n'); content = content.replace(/<\/?(h1|h2|h3|h4|h5|b|strong|p|ul|li|ol)>/gi, ''); if (content.includes('Poin Kunci:')) { content = content.replace('Poin Kunci:', '<h5>Poin Kunci:</h5><ul>') + '</ul>'; content = content.replace(/\*\* (.*?)\n/g, '<li><strong>$1</strong></li>'); } container.innerHTML = `<div class="summary-box"><button class="btn-copy" data-target="${textId}"><i class="bi bi-clipboard"></i> Salin</button><div id="${textId}">${content}</div></div>`; }
+
+    // ==================================
+    // FUNGSI HALAMAN 7: SPOTIFY SEARCH (Tetap)
+    // ==================================
+    btnSearchSpotify.addEventListener('click', () => { const query = spotifySearchQueryInput.value.trim(); if (!query) { showToast('Silakan masukkan judul lagu atau artis.', 'error'); return; } const apiUrl = `https://api.siputzx.my.id/api/s/spotify?query=${encodeURIComponent(query)}`; fetchApi(apiUrl, 'spotify-search-results', loadingSpinnerSpotifySearch, displaySpotifySearchResults); });
+    function displaySpotifySearchResults(data, containerId) { const container = document.getElementById(containerId); if (!data || data.length === 0) { displayError("Tidak ada hasil ditemukan.", containerId); return; } let html = ''; data.forEach(track => { html += `<div class="spotify-result-item"><img src="${track.thumbnail}" alt="Album Art"><div class="info"><h4>${track.title}</h4><p>${track.artist} • ${track.album}</p><p><i class="bi bi-calendar-event"></i> ${track.release_date} | <i class="bi bi-clock"></i> ${track.duration}</p></div><div class="actions"><a href="${track.track_url}" target="_blank" title="Buka di Spotify"><i class="bi bi-spotify"></i></a></div></div>`; }); container.innerHTML = html; }
+
+    // ==================================
+    // FUNGSI HALAMAN 8: SPOTIFY DOWNLOAD (Diperbarui)
+    // ==================================
+    btnDownloadSpotify.addEventListener('click', () => {
+        const url = spotifyDownloadUrlInput.value.trim();
+        if (!url) { showToast('Silakan masukkan URL Spotify.', 'error'); return; }
+        const apiUrl = `https://api.siputzx.my.id/api/d/spotifyv2?url=${encodeURIComponent(url)}`;
+        fetchApi(apiUrl, 'spotify-download-results', loadingSpinnerSpotifyDownload, displaySpotifyDownloadResults);
+    });
+    function displaySpotifyDownloadResults(data, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = `
+            <div class="result-item">
+                <img src="${data.coverImage}" alt="Album Art" style="width: 80px; height: 80px;">
+                <div class="info" style="text-align: left; flex-grow: 1;">
+                    <h4>${data.songTitle}</h4>
+                    <p>${data.artist}</p>
+                </div>
+            </div>
+            
+            <div class="media-player-box" style="margin-top: 10px;">
+                <audio controls src="${data.mp3DownloadLink}" type="audio/mpeg" preload="metadata"></audio>
+            </div>
+
+            <div class="result-item" style="margin-top: 10px;">
+                <div class="download-links" style="width: 100%; justify-content: center; margin-top: 0;">
+                    <a href="${data.mp3DownloadLink}" target="_blank" download>Unduh MP3</a>
+                    <a href="${data.coverDownloadLink}" target="_blank" download>Unduh Sampul</a>
+                </div>
+            </div>
+        `;
+    }
+
+    // ==================================
+    // FUNGSI HALAMAN 9: IPHONE QUOTE (Diperbarui)
     // ==================================
     btnGenerateIphoneQuote.addEventListener('click', () => {
         const text = iphoneQuoteText.value;
@@ -244,28 +309,27 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('Teks pesan tidak boleh kosong.', 'error');
             return;
         }
-
         const params = new URLSearchParams({
             messageText: text,
             time: iphoneQuoteTime.value,
             carrierName: iphoneQuoteCarrier.value,
             batteryPercentage: iphoneQuoteBattery.value,
             signalStrength: iphoneQuoteSignal.value,
-            emojiStyle: 'apple' // Sesuai API
+            emojiStyle: 'apple'
         });
-
         const apiUrl = `https://brat.siputzx.my.id/iphone-quoted?${params.toString()}`;
-        fetchImageApi(apiUrl, 'iphone-quote-results', loadingSpinnerIphoneQuote, displayImageResult);
+        // (DIUBAH) Kirim nama file untuk download
+        fetchImageApi(apiUrl, 'iphone-quote-results', loadingSpinnerIphoneQuote, displayImageResult, 'iphone-quote.png');
     });
 
     // ==================================
-    // FUNGSI HALAMAN 12: ANALITIK (Tetap)
+    // FUNGSI HALAMAN 10: ANALITIK (Tetap)
     // ==================================
-    function loadAnalyticsCharts(forceReload = false) { /* ... (Tetap sama) ... */
+    function loadAnalyticsCharts(forceReload = false) {
         const isDarkMode = document.body.classList.contains('dark-mode'); const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'; const textColor = isDarkMode ? '#e0e9f5' : '#1a1a1a'; const primaryColor = isDarkMode ? '#00bfff' : '#007aff';
         if (forceReload) { if (visitorsChartInstance) visitorsChartInstance.destroy(); if (featuresChartInstance) featuresChartInstance.destroy(); visitorsChartInstance = null; featuresChartInstance = null; }
         if (!visitorsChartInstance) { const ctxVisitors = document.getElementById('visitors-chart').getContext('2d'); visitorsChartInstance = new Chart(ctxVisitors, { type: 'line', data: { labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'], datasets: [{ label: 'Pengunjung', data: [150, 230, 180, 210, 250, 300, 280], fill: true, backgroundColor: primaryColor + '33', borderColor: primaryColor, tension: 0.4, pointBackgroundColor: primaryColor, }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { color: gridColor } } } } }); }
-        if (!featuresChartInstance) { const ctxFeatures = document.getElementById('features-chart').getContext('2d'); featuresChartInstance = new Chart(ctxFeatures, { type: 'doughnut', data: { labels: ['TikTok', 'Spotify', 'Image', 'Lainnya'], datasets: [{ label: 'Penggunaan Fitur', data: [450, 280, 150, 50], backgroundColor: [primaryColor, '#1DB954', '#ff9500', '#8e8e93'], borderColor: 'transparent', }] }, options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: textColor } } } } }); }
+        if (!featuresChartInstance) { const ctxFeatures = document.getElementById('features-chart').getContext('2d'); featuresChartInstance = new Chart(ctxFeatures, { type: 'doughnut', data: { labels: ['TikTok', 'Spotify', 'IQC', 'Lainnya'], datasets: [{ label: 'Penggunaan Fitur', data: [450, 280, 150, 50], backgroundColor: [primaryColor, '#1DB954', '#8e8e93', '#ff9500'], borderColor: 'transparent', }] }, options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: textColor } } } } }); }
     }
 
 });
