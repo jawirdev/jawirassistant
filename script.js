@@ -3,19 +3,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ==================================
-    // PRELOADER
+    // PRELOADER & DESKTOP CHECK
     // ==================================
     const preloader = document.getElementById('preloader');
-    // Cek jika bukan desktop, jangan sembunyikan preloader (warning akan muncul)
-    if (window.innerWidth >= 1024 && preloader) {
-        preloader.classList.add('hidden');
-    } else if (preloader && window.innerWidth < 1024) {
-        // Biarkan preloader aktif jika mobile, karena warning akan muncul
+    if (window.innerWidth >= 1024) {
+        if (preloader) preloader.classList.add('hidden');
+    } else {
+        // Biarkan preloader atau tampilkan warning (CSS akan handle)
+        console.log("Layar terlalu kecil, mode desktop diperlukan.");
     }
 
-
     // ==================================
-    // SELEKTOR ELEMEN (Dihapus Image-Gen)
+    // SELEKTOR ELEMEN
     // ==================================
     const themeToggle = document.getElementById('theme-toggle');
     const cursorLight = document.querySelector('.cursor-light');
@@ -32,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCoba = document.querySelectorAll('.btn-coba');
     const btnBack = document.querySelectorAll('.btn-back');
 
-    // Halaman 1 (Info Device)
+    // Halaman 1
     const infoTime = document.getElementById('info-time');
     const infoDevice = document.getElementById('info-device');
     const infoBattery = document.getElementById('info-battery');
@@ -63,22 +62,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const spotifyDownloadUrlInput = document.getElementById('spotify-download-url');
     const btnDownloadSpotify = document.getElementById('btn-download-spotify');
     const loadingSpinnerSpotifyDownload = document.getElementById('loading-spinner-spotify-download');
-    
-    // Halaman 9 (iPhone Quote - IQC) - Input Diperbarui
+    // Halaman 9 (iPhone Quote - IQC)
     const iqcPromptInput = document.getElementById('iqc-prompt');
     const iqcJamInput = document.getElementById('iqc-jam');
     const iqcBatreInput = document.getElementById('iqc-batre');
     const btnGenerateIqc = document.getElementById('btn-generate-iqc');
-    const loadingSpinnerIqc = document.getElementById('loading-spinner-iqc'); // Ganti nama spinner
-
+    const loadingSpinnerIqc = document.getElementById('loading-spinner-iqc'); 
     // Halaman 10 (Analitik)
     let visitorsChartInstance = null;
     let featuresChartInstance = null;
-
     // Selektor Petunjuk
     const btnsPetunjuk = document.querySelectorAll('.btn-petunjuk');
     const btnsTutupPetunjuk = document.querySelectorAll('.btn-tutup-petunjuk');
-
 
     // ... (Fungsi Toast, Navigasi, Mode Gelap, Efek Visual, Info Device, Menu, Petunjuk, Copy - Tetap Sama) ...
     function showToast(message, type = 'info') { const toast = document.createElement('div'); toast.classList.add('toast', type); toast.textContent = message; toastContainer.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; setTimeout(() => toast.remove(), 300); }, 3000); }
@@ -94,12 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
     menuHeaders.forEach(header => { header.addEventListener('click', () => { const item = header.closest('.menu-item'); item.classList.toggle('active'); document.querySelectorAll('.menu-item').forEach(otherItem => { if (otherItem !== item) otherItem.classList.remove('active'); }); }); });
     btnsPetunjuk.forEach(btn => { btn.addEventListener('click', (e) => { const modalId = e.currentTarget.id.replace('btn-petunjuk-', 'modal-petunjuk-'); const modal = document.getElementById(modalId); if (modal) modal.classList.add('active'); }); });
     btnsTutupPetunjuk.forEach(btn => { btn.addEventListener('click', (e) => { const modalId = e.currentTarget.getAttribute('data-target'); const modal = document.getElementById(modalId); if (modal) modal.classList.remove('active'); }); });
-    async function copyToClipboard(text, btn) { try { await navigator.clipboard.writeText(text); showToast('Teks berhasil disalin!', 'success'); if (btn) btn.innerHTML = '<i class="bi bi-check-lg"></i> Disalin'; } catch (err) { console.error('Gagal menyalin:', err); showToast('Gagal menyalin teks.', 'error'); } }
+    async function copyToClipboard(text, btn) { try { await navigator.clipboard.writeText(text); showToast('Teks berhasil disalin!', 'success'); if (btn) {btn.innerHTML = '<i class="bi bi-check-lg"></i> Disalin'; setTimeout(() => btn.innerHTML='<i class="bi bi-clipboard"></i> Salin', 2000)} } catch (err) { console.error('Gagal menyalin:', err); showToast('Gagal menyalin teks.', 'error'); } }
     document.body.addEventListener('click', (e) => { const btn = e.target.closest('.btn-copy'); if (btn) { const targetId = btn.getAttribute('data-target'); const targetElement = document.getElementById(targetId); if (targetElement) { copyToClipboard(targetElement.innerText, btn); } } });
 
 
     // ==================================
-    // FUNGSI API (UMUM - JSON) (Tetap)
+    // FUNGSI API (UMUM - JSON) (Diperbarui)
     // ==================================
     async function fetchApi(url, resultsContainerId, spinnerElement, displayFunction) {
         const resultsContainer = document.getElementById(resultsContainerId);
@@ -110,18 +105,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(`Error Jaringan: ${response.status} ${response.statusText}`);
             const data = await response.json();
             
-            // Cek berbagai format sukses API
             let success = false; 
             let responseData = null;
             if (data.success === true && data.data) { success = true; responseData = data.data; } // ZenzzXD
             else if (data.status === true && data.data) { success = true; responseData = data.data; } // Siputzx
             else if (data.status === true && data.result) { success = true; responseData = data.result; } // Faa
-            else if (data.status === true && data.artist && data.download) { success = true; responseData = data; } // Agas Spotify
+            else if (data.status === true && (data.artist || data.title) && data.download) { success = true; responseData = data; } // Agas Spotify
             
             if (success && responseData) {
                 displayFunction(responseData, resultsContainerId);
                 showToast('Berhasil dimuat!', 'success');
             } else {
+                 // Cek jika error ada di 'reason' (beberapa API Faa)
+                 if (data.status === false && data.reason) throw new Error(data.reason);
+                 // Error umum
                 throw new Error(data.message || data.msg || data.reason || 'Format API tidak dikenal atau data gagal.');
             }
         } catch (error) {
@@ -154,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('Gambar berhasil dibuat!', 'success');
             } else {
                 let errorMsg = `Error Jaringan: ${response.status}`;
-                try { const errData = await response.json(); errorMsg = errData.message || errData.msg || errorMsg; } catch (e) {}
+                try { const errData = await response.json(); errorMsg = errData.message || errData.msg || errData.reason || errorMsg; } catch (e) {}
                 throw new Error(errorMsg);
             }
         } catch (error) {
@@ -174,45 +171,49 @@ document.addEventListener('DOMContentLoaded', () => {
     btnDownloadTiktok.addEventListener('click', () => {
         const url = tiktokUrlInput.value.trim();
         if (!url) { showToast('Silakan masukkan URL TikTok.', 'error'); return; }
-        // (DIUBAH) API URL Baru
         const apiUrl = `https://api-faa.my.id/faa/tiktok?url=${encodeURIComponent(url)}`; 
         fetchApi(apiUrl, 'tiktok-results', loadingSpinnerTiktok, displayTikTokResults);
     });
     function displayTikTokResults(data, containerId) {
         const container = document.getElementById(containerId);
-        let title = data.title || 'Video TikTok';
+        let title = data.title || 'Konten TikTok';
         if (title.length > 100) title = title.substring(0, 100) + '...';
         
         let mediaHTML = '';
         let downloadLinksHTML = '';
+        const audioUrl = data.music_info?.url;
 
         if (data.type === "video") {
             const videoUrl = data.data; // URL video utama (No WM)
-            const audioUrl = data.music_info?.url;
-            
             mediaHTML = `
                 <div class="media-player-box">
                     <video controls src="${videoUrl}" type="video/mp4" poster="${data.cover}" preload="metadata"></video>
                 </div>
                 ${audioUrl ? `
                 <div class="media-player-box" style="margin-top: 10px;">
-                    <strong>Audio:</strong>
+                    <strong>Audio Original:</strong>
                     <audio controls src="${audioUrl}" type="audio/mpeg" preload="metadata"></audio>
                 </div>` : ''}
             `;
-            
             downloadLinksHTML += `<a href="${videoUrl}" target="_blank" download>Unduh Video (No WM)</a>`;
-            if (data.size_nowm_hd) downloadLinksHTML += `<a href="${data.data}" target="_blank" download>Unduh Video (HD)</a>`; // API ini sepertinya belum support HD terpisah? Pakai link utama saja.
-            if (audioUrl) downloadLinksHTML += `<a href="${audioUrl}" target="_blank" download>Unduh Audio</a>`;
+            // Cek jika ada link HD (API Faa mungkin tidak punya, pakai link 'data' lagi)
+            if (data.size_nowm_hd) downloadLinksHTML += `<a href="${data.data}" target="_blank" download>Unduh Video (HD)</a>`; 
+            if (audioUrl) downloadLinksHTML += `<a href="${audioUrl}" target="_blank" download="audio.mp3">Unduh Audio</a>`;
 
-        } else if (data.type === "image") {
-            // Jika API mengembalikan slide gambar (belum dicoba, tapi struktur bisa seperti ini)
-            mediaHTML = `<p>Konten ini berupa slide gambar. Silakan unduh satu per satu.</p>`;
+        } else if (data.type === "image") { // Handle slide/foto
+            mediaHTML = `<p>Konten ini berupa slide gambar (${data.images.length} gambar). Silakan unduh satu per satu.</p>`;
+             mediaHTML += `<div style="display:flex; flex-wrap:wrap; gap:5px; justify-content:center; max-height: 200px; overflow-y:auto; margin-bottom:10px;">`; // Preview kecil
+             data.images.forEach(imgUrl => {
+                 mediaHTML += `<img src="${imgUrl}" style="width:50px; height:auto; border-radius:4px;" alt="preview">`;
+             });
+             mediaHTML += `</div>`;
             if (data.images && Array.isArray(data.images)) {
                 data.images.forEach((imgUrl, index) => {
-                    downloadLinksHTML += `<a href="${imgUrl}" target="_blank" download="slide_${index + 1}.jpg">Unduh Gambar ${index + 1}</a>`;
+                    downloadLinksHTML += `<a href="${imgUrl}" target="_blank" download="slide_${index + 1}.jpeg">Unduh Gbr ${index + 1}</a>`;
                 });
             }
+             if (audioUrl) downloadLinksHTML += `<a href="${audioUrl}" target="_blank" download="audio.mp3">Unduh Audio BGM</a>`;
+
         } else {
              mediaHTML = '<p>Format tidak didukung.</p>';
         }
@@ -220,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = `
             <div class="result-item">
                 <h4>${title}</h4>
-                <p>Oleh: ${data.author?.nickname || 'Tidak diketahui'} | <i class="bi bi-eye"></i> ${data.stats?.views || 'N/A'}</p>
+                <p>Oleh: ${data.author?.nickname || 'N/A'} | <i class="bi bi-eye"></i> ${data.stats?.views || 'N/A'} | <i class="bi bi-heart"></i> ${data.stats?.likes || 'N/A'}</p>
                 ${mediaHTML}
                 <div class="download-links">${downloadLinksHTML || '<p>Tidak ada link unduhan.</p>'}</div>
             </div>`;
@@ -246,32 +247,31 @@ document.addEventListener('DOMContentLoaded', () => {
     btnDownloadSpotify.addEventListener('click', () => {
         const url = spotifyDownloadUrlInput.value.trim();
         if (!url) { showToast('Silakan masukkan URL Spotify.', 'error'); return; }
-        // (DIUBAH) API URL Baru
         const apiUrl = `https://api-agas.my.id/download/spotify?url=${encodeURIComponent(url)}`; 
         fetchApi(apiUrl, 'spotify-download-results', loadingSpinnerSpotifyDownload, displaySpotifyDownloadResults);
     });
     function displaySpotifyDownloadResults(data, containerId) {
         const container = document.getElementById(containerId);
-        // Cek jika link download valid (API Agas kadang mengembalikan 'undefined')
         const downloadUrl = data.download && !data.download.endsWith('undefined') ? data.download : null;
-
+        const title = data.title || "Lagu Spotify";
+        const artist = data.artist || "Artis Tidak Diketahui";
+        
         container.innerHTML = `
             <div class="result-item">
                 <img src="${data.thumbnail}" alt="Album Art" style="width: 80px; height: 80px;">
                 <div class="info" style="text-align: left; flex-grow: 1;">
-                    <h4>${data.title}</h4>
-                    <p>${data.artist}</p>
+                    <h4>${title}</h4>
+                    <p>${artist}</p>
                     <p><i class="bi bi-clock"></i> ${data.duration || 'N/A'}</p>
                 </div>
             </div>
-            
             ${downloadUrl ? `
             <div class="media-player-box" style="margin-top: 10px;">
                 <audio controls src="${downloadUrl}" type="audio/mpeg" preload="metadata"></audio>
             </div>
             <div class="result-item" style="margin-top: 10px;">
                 <div class="download-links" style="width: 100%; justify-content: center; margin-top: 0;">
-                    <a href="${downloadUrl}" target="_blank" download="${data.title} - ${data.artist}.mp3">Unduh MP3</a>
+                    <a href="${downloadUrl}" target="_blank" download="${title} - ${artist}.mp3">Unduh MP3</a>
                 </div>
             </div>
             ` : '<div class="error-message" style="margin-top: 10px;">Maaf, link unduhan tidak tersedia dari API.</div>'}
@@ -291,7 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!batre) { showToast('Persentase baterai tidak boleh kosong.', 'error'); return; }
 
         const params = new URLSearchParams({ prompt, jam, batre });
-        // (DIUBAH) API URL Baru
         const apiUrl = `https://api-faa.my.id/faa/iqcv2?${params.toString()}`; 
         fetchImageApi(apiUrl, 'iqc-results', loadingSpinnerIqc, displayImageResult, 'iphone-quote.png');
     });
@@ -302,8 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadAnalyticsCharts(forceReload = false) { /* ... (Tetap sama) ... */
         const isDarkMode = document.body.classList.contains('dark-mode'); const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'; const textColor = isDarkMode ? '#e0e9f5' : '#1a1a1a'; const primaryColor = isDarkMode ? '#00bfff' : '#007aff';
         if (forceReload) { if (visitorsChartInstance) visitorsChartInstance.destroy(); if (featuresChartInstance) featuresChartInstance.destroy(); visitorsChartInstance = null; featuresChartInstance = null; }
-        if (!visitorsChartInstance) { const ctxVisitors = document.getElementById('visitors-chart').getContext('2d'); visitorsChartInstance = new Chart(ctxVisitors, { type: 'line', data: { labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'], datasets: [{ label: 'Pengunjung', data: [150, 230, 180, 210, 250, 300, 280], fill: true, backgroundColor: primaryColor + '33', borderColor: primaryColor, tension: 0.4, pointBackgroundColor: primaryColor, }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { color: gridColor } } } } }); }
-        if (!featuresChartInstance) { const ctxFeatures = document.getElementById('features-chart').getContext('2d'); featuresChartInstance = new Chart(ctxFeatures, { type: 'doughnut', data: { labels: ['TikTok', 'Spotify', 'IQC', 'Lainnya'], datasets: [{ label: 'Penggunaan Fitur', data: [450, 280, 150, 50], backgroundColor: [primaryColor, '#1DB954', '#8e8e93', '#ff9500'], borderColor: 'transparent', }] }, options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: textColor } } } } }); }
+        if (!visitorsChartInstance && document.getElementById('visitors-chart')) { const ctxVisitors = document.getElementById('visitors-chart').getContext('2d'); visitorsChartInstance = new Chart(ctxVisitors, { type: 'line', data: { labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'], datasets: [{ label: 'Pengunjung', data: [150, 230, 180, 210, 250, 300, 280], fill: true, backgroundColor: primaryColor + '33', borderColor: primaryColor, tension: 0.4, pointBackgroundColor: primaryColor, }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { color: gridColor } } } } }); }
+        if (!featuresChartInstance && document.getElementById('features-chart')) { const ctxFeatures = document.getElementById('features-chart').getContext('2d'); featuresChartInstance = new Chart(ctxFeatures, { type: 'doughnut', data: { labels: ['TikTok', 'Spotify', 'IQC', 'Lainnya'], datasets: [{ label: 'Penggunaan Fitur', data: [450, 280, 150, 50], backgroundColor: [primaryColor, '#1DB954', '#8e8e93', '#ff9500'], borderColor: 'transparent', }] }, options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: textColor } } } } }); }
     }
 
 });
