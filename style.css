@@ -7,33 +7,73 @@
 :root {
     --bg-color: #ffffff; --text-color: #1a1a1a; --primary-color: #007aff; --secondary-color: #f2f2f7; --border-color: #e0e0e0; --neon-glow: rgba(0, 122, 255, 0.5); --cursor-light-color: rgba(0, 122, 255, 0.15);
     --wave-color: rgba(0, 122, 255, 0.1); --wave-color-dark-mode: rgba(0, 191, 255, 0.1);
+    /* (BARU) Warna warning */
+    --warning-bg: rgba(255, 59, 48, 0.9);
+    --warning-text: #ffffff;
+    --warning-icon: #ffcc00;
 }
 body.dark-mode {
     --bg-color: #0d1a2e; --text-color: #e0e9f5; --primary-color: #00bfff; --secondary-color: #1a2940; --border-color: #2a3f5a; --neon-glow: rgba(0, 191, 255, 0.7); --cursor-light-color: rgba(0, 191, 255, 0.12);
     --wave-color: var(--wave-color-dark-mode);
+    --warning-bg: rgba(255, 69, 58, 0.95); /* Sedikit lebih terang di dark mode */
 }
 
 /* ==================
    GAYA DASAR & RESET
    ================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.4s ease, color 0.4s ease; overflow-x: hidden; line-height: 1.6; }
+html, body { height: 100%; overflow-x: hidden; } /* Pastikan html & body full height */
+body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.4s ease, color 0.4s ease; line-height: 1.6; }
 
 main {
     position: relative;
     width: 100%;
-    min-height: 100vh;
+    min-height: calc(100vh - 100px); /* Kurangi tinggi gelombang */
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* (DIUBAH) Kembalikan ke center untuk Halaman 1 */
-    justify-content: center; 
+    justify-content: center; /* Kembalikan ke center */
     z-index: 10;
-    padding-bottom: 150px;
+    padding-bottom: 50px; /* Jarak dari gelombang */
 }
 
-/* ... (Preloader, Toast Notification, Efek Visual, Gelombang SVG - Tetap Sama) ... */
+/* (BARU) Peringatan Desktop-Only */
+#desktop-warning {
+    position: fixed;
+    inset: 0; /* Cover seluruh layar */
+    background-color: var(--warning-bg);
+    color: var(--warning-text);
+    display: none; /* Sembunyi di desktop */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    z-index: 3000; /* Paling atas */
+    animation: pulse-warning 1.5s infinite;
+}
+.warning-content i {
+    font-size: 5rem;
+    color: var(--warning-icon);
+    margin-bottom: 20px;
+}
+.warning-content h1 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: var(--warning-text); /* Override H1 biasa */
+}
+.warning-content p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+@keyframes pulse-warning {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+}
+
+
+/* ... (Preloader, Toast, Cursor Light, Gelombang SVG - Tetap Sama) ... */
 #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 2000; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s ease, visibility 0.5s ease; opacity: 1; visibility: visible; }
 #preloader.hidden { opacity: 0; visibility: hidden; }
 #preloader .spinner { width: 40px; height: 40px; border: 4px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -60,21 +100,17 @@ main {
 #menu-toggle:hover, #theme-toggle:hover { box-shadow: 0 0 20px var(--neon-glow); transform: scale(1.1); }
 .dark-mode #theme-toggle .bi-brightness-high-fill { display: none; }
 body:not(.dark-mode) #theme-toggle .bi-moon-stars-fill { display: none; }
-
-/* (DIUBAH) Animasi Tombol "Popup" */
-.btn {
-    background-color: var(--primary-color); color: var(--bg-color); font-weight: 500; font-size: 16px; padding: 12px 24px; border: none; border-radius: 12px; cursor: pointer;
-    transition: all 0.2s ease-out; /* Transisi lebih cepat */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
+.btn { background-color: var(--primary-color); color: var(--bg-color); font-weight: 500; font-size: 16px; padding: 12px 24px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s ease-out; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
 .btn:hover, .btn:focus { transform: translateY(-3px); box-shadow: 0 6px 25px var(--neon-glow); }
-.btn:active {
-    transform: scale(1.05); /* Efek "Popup" */
-    box-shadow: 0 8px 30px var(--neon-glow);
-}
+.btn:active { transform: scale(1.05); box-shadow: 0 8px 30px var(--neon-glow); }
 
-/* ... (Sidenav, Sistem Halaman, H1, H2 - Tetap Sama) ... */
-.sidenav { position: fixed; top: 0; left: 0; width: 280px; height: 100vh; background: var(--secondary-color); border-right: 1px solid var(--border-color); z-index: 1003; display: flex; flex-direction: column; padding: 20px; transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1); }
+/* (DIUBAH) Sidenav Scrolling */
+.sidenav {
+    position: fixed; top: 0; left: 0; width: 280px; height: 100vh; background: var(--secondary-color); border-right: 1px solid var(--border-color); z-index: 1003; display: flex; flex-direction: column; padding: 20px;
+    transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Aktifkan scroll jika konten panjang */
+}
+/* ... (Style Sidenav Lainnya Tetap Sama) ... */
 .sidenav.active { transform: translateX(0); }
 .sidenav-header { padding: 10px 0 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; }
 .sidenav-header h3 { font-size: 1.5rem; color: var(--primary-color); }
@@ -85,22 +121,20 @@ body:not(.dark-mode) #theme-toggle .bi-moon-stars-fill { display: none; }
 .sidenav hr { border: none; height: 1px; background-color: var(--border-color); margin: 10px 0; }
 .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1002; display: none; opacity: 0; transition: opacity 0.4s ease; }
 .overlay.active { display: block; opacity: 1; }
+
+/* ... (Sistem Halaman, H1, H2 - Tetap Sama) ... */
 .page { width: 100%; max-width: 900px; margin: 0 auto; display: none; opacity: 0; transform: translateY(20px); animation: fadeOut 0.4s ease forwards; }
 .page.active { display: block; opacity: 1; transform: translateY(0); animation: fadeIn 0.5s ease forwards; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); display: none; } }
-.content { text-align: center; padding: 20px; }
+.content { text-align: center; padding: 20px; width: 100%; } /* (DIUBAH) Pastikan content full width */
 h1 { font-size: 3rem; font-weight: 700; margin-bottom: 24px; color: var(--text-color); }
 h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--primary-color); text-align: left; padding-bottom: 10px; border-bottom: 2px solid var(--border-color); }
 
 /* ==================
    HALAMAN 1: HOME (PERBAIKAN BUG)
    ================== */
-#page-welcome .content {
-    /* (DIUBAH) Atur padding Halaman 1 agar pas di tengah */
-    padding-top: 5vh;
-    padding-bottom: 5vh;
-}
+#page-welcome .content { padding-top: 5vh; padding-bottom: 5vh; }
 .device-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 30px; text-align: left; }
 .info-box { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; transition: all 0.3s ease; }
 .info-box:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05); }
@@ -108,16 +142,10 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
 .info-box strong { font-size: 14px; color: var(--text-color); opacity: 0.7; margin-bottom: 4px; }
 .info-box span { font-size: 16px; font-weight: 500; word-wrap: break-word; }
 
-/* ==================
-   HALAMAN 2: MENU (PERBAIKAN BUG)
-   ================== */
-/* (DIUBAH) Beri margin-top agar tidak tertutup header */
-#page-menu .content {
-    margin-top: 10vh;
-}
+/* ... (Halaman Menu, Fitur Umum, Copy, Hasil, Spotify - Tetap Sama) ... */
+#page-menu .content { margin-top: 0; } /* Hapus margin-top */
 #page-menu .btn-back { text-align: left; padding: 0; margin-bottom: 16px; }
 .menu-list { display: flex; flex-direction: column; gap: 16px; text-align: left; }
-/* ... (Style Menu Item Tetap Sama) ... */
 .menu-item { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; transition: all 0.3s ease; }
 .menu-item.disabled { opacity: 0.6; }
 .menu-item:hover { border-color: var(--primary-color); box-shadow: 0 0 15px var(--neon-glow); }
@@ -129,20 +157,10 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
 .btn-coba:disabled { background: #888; cursor: not-allowed; }
 .menu-description { margin-top: 12px; margin-left: 36px; font-size: 15px; opacity: 0.8; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, margin-top 0.4s ease-out; }
 .menu-item.active .menu-description { max-height: 100px; margin-top: 12px; }
-
-/* ==================
-   HALAMAN FITUR (UMUM)
-   ================== */
-/* (DIUBAH) Beri margin-top agar tidak tertutup header */
-#page-tiktok .content, #page-yt-play .content, #page-yt-transcript .content, 
-#page-yt-summary .content, #page-spotify-search .content, #page-spotify-download .content,
-#page-iphone-quote .content, #page-analytics .content {
-    margin-top: 10vh;
-}
-/* ... (Style Fitur Umum, Petunjuk, Input, Spinner, Copy, Hasil - Tetap Sama) ... */
+#page-tiktok .content, #page-yt-play .content, #page-yt-transcript .content, #page-yt-summary .content, #page-spotify-search .content, #page-spotify-download .content, #page-iphone-quote .content, #page-analytics .content { margin-top: 0; } /* Hapus margin-top */
 .btn-back { background: none; border: none; color: var(--primary-color); font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; text-align: left; padding: 0; margin-bottom: 16px; }
 .btn-back:hover { text-decoration: underline; }
-.feature-container { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-top: 16px; text-align: left; position: relative; }
+.feature-container { background: var(--secondary-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-top: 16px; text-align: left; position: relative; width: 100%; } /* (DIUBAH) Pastikan full width */
 .feature-subtext { font-size: 15px; opacity: 0.8; margin-bottom: 16px; text-align: left; }
 .btn-petunjuk { background: none; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
 .modal-petunjuk { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-bottom: 16px; display: none; animation: fadeIn 0.3s ease; }
@@ -161,7 +179,7 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
 .result-item { background: var(--bg-color); padding: 16px; border: 1px solid var(--border-color); border-radius: 8px; position: relative; }
 .result-item h4 { margin-bottom: 8px; font-size: 1.1rem; }
 .result-item p { font-size: 14px; opacity: 0.8; margin-bottom: 12px; }
-.result-item .download-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; } /* (DIUBAH) Tambah margin-top */
+.result-item .download-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 .result-item .download-links a { background: var(--primary-color); color: var(--bg-color); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 500; transition: all 0.2s ease-out; }
 .result-item .download-links a:hover { transform: scale(1.05); box-shadow: 0 4px 15px var(--neon-glow); }
 .error-message { color: #ff3b30; background: rgba(255, 59, 48, 0.1); border: 1px solid #ff3b30; padding: 12px; border-radius: 8px; }
@@ -182,78 +200,16 @@ h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; color: var(--prim
 .spotify-result-item .actions { display: flex; flex-direction: column; gap: 8px; }
 .spotify-result-item .actions a { font-size: 20px; color: var(--primary-color); text-decoration: none; transition: all 0.2s ease; }
 .spotify-result-item .actions a:hover { transform: scale(1.1); }
-
-/* (BARU) Style untuk Media Player */
-.media-player-box {
-    margin-bottom: 16px;
-}
-.media-player-box video,
-.media-player-box audio {
-    width: 100%;
-    border-radius: 8px;
-}
-
-/* Style untuk Halaman Fitur IQC (Dihapus image-gen) */
-.input-grid-col-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
-    text-align: left;
-}
-.input-grid-col-2 label {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 14px;
-    opacity: 0.8;
-}
-.input-grid-col-2 input {
-    padding: 10px 12px;
-    font-size: 15px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-color);
-    color: var(--text-color);
-    border-radius: 8px;
-    width: 100%;
-}
-.feature-container .btn {
-    width: 100%; /* Tombol "Buat" jadi full-width */
-    margin-top: 10px;
-}
-.image-result-box {
-    margin-top: 20px;
-    padding: 10px;
-    background: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column; /* (DIUBAH) Agar tombol bisa di bawah */
-    justify-content: center;
-    align-items: center;
-    gap: 16px; /* Jarak antara gambar dan tombol */
-}
-.image-result-box img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-}
-/* (BARU) Tombol download untuk gambar */
-.image-result-box .download-btn {
-    background: var(--primary-color);
-    color: var(--bg-color);
-    padding: 8px 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 14px;
-    transition: all 0.2s ease-out;
-}
-.image-result-box .download-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px var(--neon-glow);
-}
-
+.media-player-box { margin-bottom: 16px; }
+.media-player-box video, .media-player-box audio { width: 100%; border-radius: 8px; max-height: 400px; /* Batasi tinggi video */ }
+.input-grid-col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; text-align: left; }
+.input-grid-col-2 label { display: flex; flex-direction: column; gap: 4px; font-size: 14px; opacity: 0.8; }
+.input-grid-col-2 input { padding: 10px 12px; font-size: 15px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); border-radius: 8px; width: 100%; }
+.feature-container .btn { width: 100%; margin-top: 10px; }
+.image-result-box { margin-top: 20px; padding: 10px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; }
+.image-result-box img { max-width: 100%; height: auto; border-radius: 4px; }
+.image-result-box .download-btn { background: var(--primary-color); color: var(--bg-color); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 14px; transition: all 0.2s ease-out; }
+.image-result-box .download-btn:hover { transform: scale(1.05); box-shadow: 0 4px 15px var(--neon-glow); }
 
 /* ... (Halaman Analitik & Footer - Tetap Sama) ... */
 .analytics-container { display: grid; grid-template-columns: 1fr; gap: 24px; text-align: left; }
@@ -267,35 +223,38 @@ canvas { width: 100% !important; height: auto !important; }
 footer { width: 100%; text-align: center; padding: 20px; font-weight: 300; font-size: 14px; color: var(--text-color); opacity: 0.6; z-index: 10; margin-top: auto; position: relative; }
 
 /* ==================
-   RESPONSIVE
+   RESPONSIVE (PERBAIKAN BUG + DESKTOP ONLY)
    ================== */
+
+/* (BARU) Terapkan Desktop Only untuk layar <= 1024px */
+@media (max-width: 1024px) {
+    main, #menu-toggle, #theme-toggle, .cursor-light, .ocean, footer {
+        display: none; /* Sembunyikan semua konten utama */
+    }
+    #desktop-warning {
+        display: flex; /* Tampilkan peringatan */
+    }
+    body {
+        overflow: hidden; /* Cegah scroll saat peringatan muncul */
+    }
+}
+
+/* Penyesuaian untuk layar sangat kecil (jika warning tidak aktif) */
 @media (max-width: 768px) {
     h1 { font-size: 2.2rem; }
     h2 { font-size: 1.8rem; }
     .input-grup { flex-direction: column; }
     .content { padding: 10px; }
-    #theme-toggle { top: 15px; right: 15px; }
+    /* Tombol header tetap muncul di desktop, jadi posisi ini OK */
+    #theme-toggle { top: 15px; right: 15px; } 
     #menu-toggle { top: 15px; left: 15px; }
-    /* (DIUBAH) Perbaikan centering Halaman 1 */
-    #page-welcome .content {
-        padding-top: 10vh;
-        padding-bottom: 5vh;
-    }
-    /* (DIUBAH) Tombol berdempetan */
-    #page-menu .content, #page-tiktok .content, #page-yt-play .content, 
-    #page-yt-transcript .content, #page-yt-summary .content, 
-    #page-spotify-search .content, #page-spotify-download .content,
-    #page-iphone-quote .content, #page-analytics .content {
-        margin-top: 5vh; /* Kurangi margin di HP */
-    }
-    #page-menu .btn-back { margin-top: 50px; margin-bottom: 8px; }
 }
 
 @media (max-width: 600px) {
     /* (PERBAIKAN BUG) Bug Layout HP */
     .device-info-grid {
         grid-template-columns: 1fr 1fr; /* Paksa 2 kolom */
-        grid-auto-rows: 1fr; /* (PENTING) Paksa semua kotak sama tinggi */
+        align-items: stretch; /* (PENTING) Paksa semua kotak sama tinggi */
     }
     .input-grid-col-2 {
         grid-template-columns: 1fr; /* Jadi 1 kolom di HP */
