@@ -10,6 +10,14 @@
 </head>
 <body>
 
+    <div id="desktop-warning">
+        <div class="warning-content">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <h1>Mode Desktop Diperlukan</h1>
+            <p>Untuk pengalaman terbaik, silakan buka website ini di layar yang lebih besar (Desktop/Laptop) atau aktifkan "Situs Desktop" di browser HP Anda.</p>
+        </div>
+    </div>
+
     <div id="preloader"><div class="spinner"></div></div>
     <div id="toast-container"></div>
     <button id="theme-toggle"><i class="bi bi-brightness-high-fill"></i><i class="bi bi-moon-stars-fill"></i></button>
@@ -34,13 +42,9 @@
 
     <div class="ocean">
         <svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-            <defs>
-                <path id="wave-path" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-            </defs>
+            <defs><path id="wave-path" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
             <g class="wave-container">
-                <use xlink:href="#wave-path" x="48" y="0" fill="var(--wave-color)" opacity="0.5" />
-                <use xlink:href="#wave-path" x="48" y="3" fill="var(--wave-color)" opacity="0.7" />
-                <use xlink:href="#wave-path" x="48" y="5" fill="var(--wave-color)" />
+                <use xlink:href="#wave-path" x="48" y="0" fill="var(--wave-color)" opacity="0.5" /><use xlink:href="#wave-path" x="48" y="3" fill="var(--wave-color)" opacity="0.7" /><use xlink:href="#wave-path" x="48" y="5" fill="var(--wave-color)" />
             </g>
         </svg>
     </div>
@@ -86,11 +90,7 @@
                     <button class="btn-petunjuk" id="btn-petunjuk-tiktok"><i class="bi bi-question-circle"></i> Petunjuk</button>
                     <div class="modal-petunjuk" id="modal-petunjuk-tiktok">
                         <p><strong>Cara Penggunaan:</strong></p>
-                        <ol>
-                            <li>Buka aplikasi TikTok dan salin link video.</li>
-                            <li>Tempel (paste) link tersebut di kotak di bawah ini.</li>
-                            <li>Klik tombol "Unduh".</li>
-                        </ol>
+                        <ol><li>Buka aplikasi TikTok dan salin link video.</li><li>Tempel (paste) link tersebut di kotak di bawah ini.</li><li>Klik tombol "Unduh".</li></ol>
                         <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-tiktok">Mengerti</button>
                     </div>
                     <div class="input-grup">
@@ -98,8 +98,7 @@
                         <button class="btn" id="btn-download-tiktok">Unduh</button>
                     </div>
                     <div id="loading-spinner-tiktok" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Memproses...</span></div>
-                    <div id="tiktok-results" class="results-container">
-                        </div>
+                    <div id="tiktok-results" class="results-container"></div>
                 </div>
             </div>
         </section>
@@ -112,11 +111,7 @@
                     <button class="btn-petunjuk" id="btn-petunjuk-yt-play"><i class="bi bi-question-circle"></i> Petunjuk</button>
                     <div class="modal-petunjuk" id="modal-petunjuk-yt-play">
                         <p><strong>Cara Penggunaan:</strong></p>
-                        <ol>
-                            <li>Ketik judul lagu atau video (contoh: "Laskar Pelangi").</li>
-                            <li>Klik tombol "Cari".</li>
-                            <li><b>Peringatan:</b> Fitur ini mungkin gagal karena batasan API (CORS).</li>
-                        </ol>
+                        <ol><li>Ketik judul lagu atau video (contoh: "Laskar Pelangi").</li><li>Klik tombol "Cari".</li><li><b>Peringatan:</b> Fitur ini mungkin gagal karena batasan API (CORS).</li></ol>
                         <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-yt-play">Mengerti</button>
                     </div>
                     <div class="input-grup">
@@ -124,25 +119,20 @@
                         <button class="btn" id="btn-search-yt-play">Cari</button>
                     </div>
                     <div id="loading-spinner-yt-play" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Mencari video...</span></div>
-                    <div id="yt-play-results" class="results-container">
-                        </div>
+                    <div id="yt-play-results" class="results-container"></div>
                 </div>
             </div>
         </section>
 
         <section class="page" id="page-yt-transcript">
-            <div class="content">
+             <div class="content">
                 <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
                 <h2><i class="bi bi-file-text-fill"></i> Transkrip YouTube</h2>
                 <div class="feature-container">
                     <button class="btn-petunjuk" id="btn-petunjuk-yt-transcript"><i class="bi bi-question-circle"></i> Petunjuk</button>
                     <div class="modal-petunjuk" id="modal-petunjuk-yt-transcript">
                         <p><strong>Cara Penggunaan:</strong></p>
-                        <ol>
-                            <li>Salin link video YouTube yang ingin kamu ambil transkripnya.</li>
-                            <li>Tempel link tersebut di kotak di bawah ini.</li>
-                            <li><b>Peringatan:</b> Fitur ini mungkin gagal karena batasan API (CORS).</li>
-                        </ol>
+                        <ol><li>Salin link video YouTube yang ingin kamu ambil transkripnya.</li><li>Tempel link tersebut di kotak di bawah ini.</li><li><b>Peringatan:</b> Fitur ini mungkin gagal karena batasan API (CORS).</li></ol>
                         <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-yt-transcript">Mengerti</button>
                     </div>
                     <div class="input-grup">
@@ -150,25 +140,20 @@
                         <button class="btn" id="btn-get-yt-transcript">Ambil</button>
                     </div>
                     <div id="loading-spinner-yt-transcript" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Mengambil transkrip...</span></div>
-                    <div id="yt-transcript-results" class="results-container">
-                        </div>
+                    <div id="yt-transcript-results" class="results-container"></div>
                 </div>
             </div>
         </section>
 
         <section class="page" id="page-yt-summary">
-            <div class="content">
+             <div class="content">
                 <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
                 <h2><i class="bi bi-card-checklist"></i> Peringkas YouTube</h2>
                 <div class="feature-container">
                     <button class="btn-petunjuk" id="btn-petunjuk-yt-summary"><i class="bi bi-question-circle"></i> Petunjuk</button>
                     <div class="modal-petunjuk" id="modal-petunjuk-yt-summary">
                         <p><strong>Cara Penggunaan:</strong></p>
-                        <ol>
-                            <li>Salin link video YouTube yang ingin kamu ringkas.</li>
-                            <li>Tempel link tersebut di kotak di bawah ini.</li>
-                            <li><b>Peringatan:</b> Fitur ini mungkin gagal karena batasan API (CORS).</li>
-                        </ol>
+                        <ol><li>Salin link video YouTube yang ingin kamu ringkas.</li><li>Tempel link tersebut di kotak di bawah ini.</li><li><b>Peringatan:</b> Fitur ini mungkin gagal karena batasan API (CORS).</li></ol>
                         <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-yt-summary">Mengerti</button>
                     </div>
                     <div class="input-grup">
@@ -176,8 +161,7 @@
                         <button class="btn" id="btn-get-yt-summary">Ringkas</button>
                     </div>
                     <div id="loading-spinner-yt-summary" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Membuat ringkasan...</span></div>
-                    <div id="yt-summary-results" class="results-container">
-                        </div>
+                    <div id="yt-summary-results" class="results-container"></div>
                 </div>
             </div>
         </section>
@@ -190,10 +174,7 @@
                     <button class="btn-petunjuk" id="btn-petunjuk-spotify-search"><i class="bi bi-question-circle"></i> Petunjuk</button>
                     <div class="modal-petunjuk" id="modal-petunjuk-spotify-search">
                         <p><strong>Cara Penggunaan:</strong></p>
-                        <ol>
-                            <li>Ketik judul lagu atau artis (contoh: "Serana").</li>
-                            <li>Klik tombol "Cari".</li>
-                        </ol>
+                        <ol><li>Ketik judul lagu atau artis (contoh: "Serana").</li><li>Klik tombol "Cari".</li></ol>
                         <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-spotify-search">Mengerti</button>
                     </div>
                     <div class="input-grup">
@@ -207,18 +188,14 @@
         </section>
 
         <section class="page" id="page-spotify-download">
-            <div class="content">
+             <div class="content">
                 <button class="btn-back" data-target="page-menu"><i class="bi bi-arrow-left-circle"></i> Kembali ke Menu</button>
                 <h2><i class="bi bi-download"></i> Unduh Spotify</h2>
                 <div class="feature-container">
                     <button class="btn-petunjuk" id="btn-petunjuk-spotify-download"><i class="bi bi-question-circle"></i> Petunjuk</button>
                     <div class="modal-petunjuk" id="modal-petunjuk-spotify-download">
                         <p><strong>Cara Penggunaan:</strong></p>
-                        <ol>
-                            <li>Buka Spotify dan salin link lagu.</li>
-                            <li>Tempel link tersebut di kotak di bawah ini.</li>
-                            <li>Klik tombol "Unduh".</li>
-                        </ol>
+                        <ol><li>Buka Spotify dan salin link lagu.</li><li>Tempel link tersebut di kotak di bawah ini.</li><li>Klik tombol "Unduh".</li></ol>
                         <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-spotify-download">Mengerti</button>
                     </div>
                     <div class="input-grup">
@@ -226,8 +203,7 @@
                         <button class="btn" id="btn-download-spotify">Unduh</button>
                     </div>
                     <div id="loading-spinner-spotify-download" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Memproses link...</span></div>
-                    <div id="spotify-download-results" class="results-container">
-                         </div>
+                    <div id="spotify-download-results" class="results-container"></div>
                 </div>
             </div>
         </section>
@@ -240,27 +216,21 @@
                     <button class="btn-petunjuk" id="btn-petunjuk-iphone-quote"><i class="bi bi-question-circle"></i> Petunjuk</button>
                     <div class="modal-petunjuk" id="modal-petunjuk-iphone-quote">
                         <p><strong>Cara Penggunaan:</strong></p>
-                        <ol>
-                            <li>Masukkan teks pesan yang kamu inginkan.</li>
-                            <li>(Opsional) Ubah detail status bar.</li>
-                            <li>Klik tombol "Buat Quote".</li>
-                        </ol>
+                        <ol><li>Masukkan teks pesan (prompt).</li><li>Masukkan jam (contoh: 19:23).</li><li>Masukkan persentase baterai (contoh: 15).</li><li>Klik tombol "Buat Quote".</li></ol>
                         <button class="btn-tutup-petunjuk" data-target="modal-petunjuk-iphone-quote">Mengerti</button>
                     </div>
 
                     <div class="input-grup">
-                        <input type="text" id="iphone-quote-text" placeholder="Ketik pesan di sini...">
+                        <input type="text" id="iqc-prompt" placeholder="Ketik pesan (prompt)...">
                     </div>
                     <div class="input-grid-col-2">
-                        <label>Waktu: <input type="text" id="iphone-quote-time" value="11:26"></label>
-                        <label>Operator: <input type="text" id="iphone-quote-carrier" value="INDOSAT OORE..."></label>
-                        <label>Baterai (%): <input type="number" id="iphone-quote-battery" value="88" min="0" max="100"></label>
-                        <label>Sinyal (1-4): <input type="number" id="iphone-quote-signal" value="4" min="1" max="4"></label>
+                        <label>Jam: <input type="text" id="iqc-jam" value="19:23"></label>
+                        <label>Baterai (%): <input type="number" id="iqc-batre" value="15" min="0" max="100"></label>
                     </div>
-                    <button class="btn" id="btn-generate-iphone-quote">Buat Quote</button>
+                    <button class="btn" id="btn-generate-iqc">Buat Quote</button>
                     
-                    <div id="loading-spinner-iphone-quote" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Membuat quote...</span></div>
-                    <div id="iphone-quote-results" class="results-container image-result-box"></div>
+                    <div id="loading-spinner-iqc" class="loading-spinner" style="display: none;"><div class="spinner"></div><span>Membuat quote...</span></div>
+                    <div id="iqc-results" class="results-container image-result-box"></div>
                 </div>
             </div>
         </section>
