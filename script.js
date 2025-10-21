@@ -6,12 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // PRELOADER & DESKTOP CHECK
     // ==================================
     const preloader = document.getElementById('preloader');
-    if (window.innerWidth >= 1024) {
+    // Hanya sembunyikan preloader jika di desktop
+    if (window.innerWidth >= 1024) { 
         if (preloader) preloader.classList.add('hidden');
     } else {
-        // Biarkan preloader atau tampilkan warning (CSS akan handle)
-        console.log("Layar terlalu kecil, mode desktop diperlukan.");
+        // Jika bukan desktop, biarkan preloader (CSS akan menampilkan warning)
+        console.warn("Mode non-desktop terdeteksi. Peringatan ditampilkan.");
     }
+
 
     // ==================================
     // SELEKTOR ELEMEN
@@ -19,8 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const cursorLight = document.querySelector('.cursor-light');
     const toastContainer = document.getElementById('toast-container');
-    
-    // Navigasi
     const menuToggle = document.getElementById('menu-toggle');
     const sidenav = document.getElementById('sidenav');
     const overlay = document.getElementById('overlay');
@@ -30,48 +30,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuHeaders = document.querySelectorAll('.menu-header');
     const btnCoba = document.querySelectorAll('.btn-coba');
     const btnBack = document.querySelectorAll('.btn-back');
-
-    // Halaman 1
     const infoTime = document.getElementById('info-time');
     const infoDevice = document.getElementById('info-device');
     const infoBattery = document.getElementById('info-battery');
     const infoIp = document.getElementById('info-ip');
     const infoLocation = document.getElementById('info-location');
     const infoNetwork = document.getElementById('info-network');
-    // Halaman 3 (TikTok)
     const tiktokUrlInput = document.getElementById('tiktok-url');
     const btnDownloadTiktok = document.getElementById('btn-download-tiktok');
     const loadingSpinnerTiktok = document.getElementById('loading-spinner-tiktok');
-    // Halaman 4 (YT Play)
     const ytPlayQueryInput = document.getElementById('yt-play-query');
     const btnSearchYtPlay = document.getElementById('btn-search-yt-play');
     const loadingSpinnerYtPlay = document.getElementById('loading-spinner-yt-play');
-    // Halaman 5 (YT Transcript)
     const ytTranscriptUrlInput = document.getElementById('yt-transcript-url');
     const btnGetYtTranscript = document.getElementById('btn-get-yt-transcript');
     const loadingSpinnerYtTranscript = document.getElementById('loading-spinner-yt-transcript');
-    // Halaman 6 (YT Summary)
     const ytSummaryUrlInput = document.getElementById('yt-summary-url');
     const btnGetYtSummary = document.getElementById('btn-get-yt-summary');
     const loadingSpinnerYtSummary = document.getElementById('loading-spinner-yt-summary');
-    // Halaman 7 (Spotify Search)
     const spotifySearchQueryInput = document.getElementById('spotify-search-query');
     const btnSearchSpotify = document.getElementById('btn-search-spotify');
     const loadingSpinnerSpotifySearch = document.getElementById('loading-spinner-spotify-search');
-    // Halaman 8 (Spotify Download)
     const spotifyDownloadUrlInput = document.getElementById('spotify-download-url');
     const btnDownloadSpotify = document.getElementById('btn-download-spotify');
     const loadingSpinnerSpotifyDownload = document.getElementById('loading-spinner-spotify-download');
-    // Halaman 9 (iPhone Quote - IQC)
     const iqcPromptInput = document.getElementById('iqc-prompt');
     const iqcJamInput = document.getElementById('iqc-jam');
     const iqcBatreInput = document.getElementById('iqc-batre');
     const btnGenerateIqc = document.getElementById('btn-generate-iqc');
     const loadingSpinnerIqc = document.getElementById('loading-spinner-iqc'); 
-    // Halaman 10 (Analitik)
     let visitorsChartInstance = null;
     let featuresChartInstance = null;
-    // Selektor Petunjuk
     const btnsPetunjuk = document.querySelectorAll('.btn-petunjuk');
     const btnsTutupPetunjuk = document.querySelectorAll('.btn-tutup-petunjuk');
 
@@ -82,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showPage(pageId) { pages.forEach(page => { if (page.id === pageId) { setTimeout(() => { page.classList.add('active'); if (pageId === 'page-analytics') loadAnalyticsCharts(); }, 100); } else { page.classList.remove('active'); } }); }
     btnMulai.addEventListener('click', () => showPage('page-menu')); btnCoba.forEach(btn => { btn.addEventListener('click', (e) => { const targetPageId = e.target.getAttribute('data-target'); if (targetPageId) showPage(targetPageId); }); }); btnBack.forEach(btn => { btn.addEventListener('click', (e) => { const targetPageId = e.currentTarget.getAttribute('data-target'); if (targetPageId) showPage(targetPageId); }); });
     if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
-    themeToggle.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); if (document.getElementById('page-analytics').classList.contains('active')) { loadAnalyticsCharts(true); } });
+    themeToggle.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); if (document.getElementById('page-analytics') && document.getElementById('page-analytics').classList.contains('active')) { loadAnalyticsCharts(true); } });
     document.addEventListener('mousemove', (e) => { cursorLight.style.transform = `translate(${e.clientX - 250}px, ${e.clientY - 250}px)`; }); document.addEventListener('touchmove', (e) => { const touch = e.touches[0]; cursorLight.style.transform = `translate(${touch.clientX - 250}px, ${touch.clientY - 250}px)`; });
     function loadDeviceInfo() { function updateTime() { const now = new Date(); infoTime.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }); } updateTime(); setInterval(updateTime, 1000); infoDevice.textContent = navigator.userAgentData?.platform || navigator.platform || 'Tidak diketahui'; if ('getBattery' in navigator) { navigator.getBattery().then(battery => { function updateBatteryStatus() { const level = (battery.level * 100).toFixed(0); infoBattery.textContent = `${level}% ${battery.charging ? '(Mengisi daya)' : '(Tidak mengisi)'}`; } updateBatteryStatus(); battery.addEventListener('levelchange', updateBatteryStatus); battery.addEventListener('chargingchange', updateBatteryStatus); }); } else { infoBattery.textContent = 'Tidak didukung'; } const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection; infoNetwork.textContent = connection ? (connection.effectiveType ? `${connection.effectiveType.toUpperCase()}` : 'Tidak diketahui') : 'Tidak didukung'; fetch('https://ipapi.co/json/').then(response => response.json()).then(data => { infoIp.textContent = data.ip || 'Gagal memuat'; infoLocation.textContent = `${data.city}, ${data.region}, ${data.country_name}`; }).catch(() => { infoIp.textContent = 'Gagal memuat'; infoLocation.textContent = 'Gagal memuat'; }); }
     loadDeviceInfo();
@@ -116,9 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayFunction(responseData, resultsContainerId);
                 showToast('Berhasil dimuat!', 'success');
             } else {
-                 // Cek jika error ada di 'reason' (beberapa API Faa)
                  if (data.status === false && data.reason) throw new Error(data.reason);
-                 // Error umum
+                 // Cek jika API Faa return error object di result
+                 if (data.status === true && data.result && data.result.error) throw new Error(data.result.error);
                 throw new Error(data.message || data.msg || data.reason || 'Format API tidak dikenal atau data gagal.');
             }
         } catch (error) {
@@ -138,30 +127,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================
     // FUNGSI API (UMUM - GAMBAR) (Tetap)
     // ==================================
-    async function fetchImageApi(url, resultsContainerId, spinnerElement, displayFunction, fileName) {
-        const resultsContainer = document.getElementById(resultsContainerId);
-        resultsContainer.innerHTML = '';
-        spinnerElement.style.display = 'flex';
+    async function fetchImageApi(url, resultsContainerId, spinnerElement, displayFunction, fileName) { /* ... (Tetap sama) ... */
+        const resultsContainer = document.getElementById(resultsContainerId); resultsContainer.innerHTML = ''; spinnerElement.style.display = 'flex';
         try {
             const response = await fetch(url);
-            if (response.ok && response.headers.get('Content-Type')?.includes('image')) {
-                const blob = await response.blob();
-                const imgUrl = URL.createObjectURL(blob);
-                displayFunction(imgUrl, resultsContainerId, fileName); 
-                showToast('Gambar berhasil dibuat!', 'success');
-            } else {
-                let errorMsg = `Error Jaringan: ${response.status}`;
-                try { const errData = await response.json(); errorMsg = errData.message || errData.msg || errData.reason || errorMsg; } catch (e) {}
-                throw new Error(errorMsg);
-            }
-        } catch (error) {
-            console.error('Error fetching Image API:', error);
-            let userMessage = error.message.includes('Failed to fetch') ? 'Gagal terhubung ke API. (CORS atau API offline)' : `Gagal: ${error.message}`;
-            displayError(userMessage, resultsContainerId);
-            showToast(userMessage, 'error');
-        } finally {
-            spinnerElement.style.display = 'none';
-        }
+            if (response.ok && response.headers.get('Content-Type')?.includes('image')) { const blob = await response.blob(); const imgUrl = URL.createObjectURL(blob); displayFunction(imgUrl, resultsContainerId, fileName); showToast('Gambar berhasil dibuat!', 'success');
+            } else { let errorMsg = `Error Jaringan: ${response.status}`; try { const errData = await response.json(); errorMsg = errData.message || errData.msg || errData.reason || errorMsg; } catch (e) {} throw new Error(errorMsg); }
+        } catch (error) { console.error('Error fetching Image API:', error); let userMessage = error.message.includes('Failed to fetch') ? 'Gagal terhubung ke API. (CORS atau API offline)' : `Gagal: ${error.message}`; displayError(userMessage, resultsContainerId); showToast(userMessage, 'error');
+        } finally { spinnerElement.style.display = 'none'; }
     }
     function displayImageResult(imgUrl, containerId, fileName = 'gambar.png') { const container = document.getElementById(containerId); container.innerHTML = `<img src="${imgUrl}" alt="Hasil Gambar"><a href="${imgUrl}" download="${fileName}" class="download-btn"><i class="bi bi-download"></i> Unduh Gambar</a>`; }
 
@@ -186,45 +159,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.type === "video") {
             const videoUrl = data.data; // URL video utama (No WM)
             mediaHTML = `
-                <div class="media-player-box">
-                    <video controls src="${videoUrl}" type="video/mp4" poster="${data.cover}" preload="metadata"></video>
-                </div>
-                ${audioUrl ? `
-                <div class="media-player-box" style="margin-top: 10px;">
-                    <strong>Audio Original:</strong>
-                    <audio controls src="${audioUrl}" type="audio/mpeg" preload="metadata"></audio>
-                </div>` : ''}
-            `;
+                <div class="media-player-box"><video controls src="${videoUrl}" type="video/mp4" poster="${data.cover}" preload="metadata"></video></div>
+                ${audioUrl ? `<div class="media-player-box" style="margin-top: 10px;"><strong>Audio Original:</strong><audio controls src="${audioUrl}" type="audio/mpeg" preload="metadata"></audio></div>` : ''}`;
             downloadLinksHTML += `<a href="${videoUrl}" target="_blank" download>Unduh Video (No WM)</a>`;
-            // Cek jika ada link HD (API Faa mungkin tidak punya, pakai link 'data' lagi)
-            if (data.size_nowm_hd) downloadLinksHTML += `<a href="${data.data}" target="_blank" download>Unduh Video (HD)</a>`; 
             if (audioUrl) downloadLinksHTML += `<a href="${audioUrl}" target="_blank" download="audio.mp3">Unduh Audio</a>`;
 
-        } else if (data.type === "image") { // Handle slide/foto
-            mediaHTML = `<p>Konten ini berupa slide gambar (${data.images.length} gambar). Silakan unduh satu per satu.</p>`;
-             mediaHTML += `<div style="display:flex; flex-wrap:wrap; gap:5px; justify-content:center; max-height: 200px; overflow-y:auto; margin-bottom:10px;">`; // Preview kecil
-             data.images.forEach(imgUrl => {
-                 mediaHTML += `<img src="${imgUrl}" style="width:50px; height:auto; border-radius:4px;" alt="preview">`;
-             });
+        } else if (data.type === "image" && data.images && Array.isArray(data.images)) {
+            mediaHTML = `<p>Konten ini berupa slide gambar (${data.images.length} gambar).</p><div style="display:flex; flex-wrap:wrap; gap:5px; justify-content:center; max-height: 200px; overflow-y:auto; margin-bottom:10px;">`;
+             data.images.forEach(imgUrl => { mediaHTML += `<img src="${imgUrl}" style="width:50px; height:auto; border-radius:4px;" alt="preview">`; });
              mediaHTML += `</div>`;
-            if (data.images && Array.isArray(data.images)) {
-                data.images.forEach((imgUrl, index) => {
-                    downloadLinksHTML += `<a href="${imgUrl}" target="_blank" download="slide_${index + 1}.jpeg">Unduh Gbr ${index + 1}</a>`;
-                });
-            }
+            data.images.forEach((imgUrl, index) => { downloadLinksHTML += `<a href="${imgUrl}" target="_blank" download="slide_${index + 1}.jpeg">Unduh Gbr ${index + 1}</a>`; });
              if (audioUrl) downloadLinksHTML += `<a href="${audioUrl}" target="_blank" download="audio.mp3">Unduh Audio BGM</a>`;
+        } else { mediaHTML = '<p>Format tidak didukung atau data gambar tidak ditemukan.</p>'; }
 
-        } else {
-             mediaHTML = '<p>Format tidak didukung.</p>';
-        }
-
-        container.innerHTML = `
-            <div class="result-item">
-                <h4>${title}</h4>
-                <p>Oleh: ${data.author?.nickname || 'N/A'} | <i class="bi bi-eye"></i> ${data.stats?.views || 'N/A'} | <i class="bi bi-heart"></i> ${data.stats?.likes || 'N/A'}</p>
-                ${mediaHTML}
-                <div class="download-links">${downloadLinksHTML || '<p>Tidak ada link unduhan.</p>'}</div>
-            </div>`;
+        container.innerHTML = `<div class="result-item"><h4>${title}</h4><p>Oleh: ${data.author?.nickname || 'N/A'} | <i class="bi bi-eye"></i> ${data.stats?.views || 'N/A'} | <i class="bi bi-heart"></i> ${data.stats?.likes || 'N/A'}</p>${mediaHTML}<div class="download-links">${downloadLinksHTML || '<p>Tidak ada link unduhan.</p>'}</div></div>`;
     }
 
     // ... (Fungsi Halaman 4, 5, 6, 7 - Tetap Sama) ...
@@ -257,24 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const artist = data.artist || "Artis Tidak Diketahui";
         
         container.innerHTML = `
-            <div class="result-item">
-                <img src="${data.thumbnail}" alt="Album Art" style="width: 80px; height: 80px;">
-                <div class="info" style="text-align: left; flex-grow: 1;">
-                    <h4>${title}</h4>
-                    <p>${artist}</p>
-                    <p><i class="bi bi-clock"></i> ${data.duration || 'N/A'}</p>
-                </div>
-            </div>
-            ${downloadUrl ? `
-            <div class="media-player-box" style="margin-top: 10px;">
-                <audio controls src="${downloadUrl}" type="audio/mpeg" preload="metadata"></audio>
-            </div>
-            <div class="result-item" style="margin-top: 10px;">
-                <div class="download-links" style="width: 100%; justify-content: center; margin-top: 0;">
-                    <a href="${downloadUrl}" target="_blank" download="${title} - ${artist}.mp3">Unduh MP3</a>
-                </div>
-            </div>
-            ` : '<div class="error-message" style="margin-top: 10px;">Maaf, link unduhan tidak tersedia dari API.</div>'}
+            <div class="result-item"><img src="${data.thumbnail}" alt="Album Art" style="width: 80px; height: 80px;"><div class="info" style="text-align: left; flex-grow: 1;"><h4>${title}</h4><p>${artist}</p><p><i class="bi bi-clock"></i> ${data.duration || 'N/A'}</p></div></div>
+            ${downloadUrl ? `<div class="media-player-box" style="margin-top: 10px;"><audio controls src="${downloadUrl}" type="audio/mpeg" preload="metadata"></audio></div><div class="result-item" style="margin-top: 10px;"><div class="download-links" style="width: 100%; justify-content: center; margin-top: 0;"><a href="${downloadUrl}" target="_blank" download="${title} - ${artist}.mp3">Unduh MP3</a></div></div>` : '<div class="error-message" style="margin-top: 10px;">Maaf, link unduhan tidak tersedia dari API.</div>'}
         `;
     }
 
@@ -301,8 +233,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadAnalyticsCharts(forceReload = false) { /* ... (Tetap sama) ... */
         const isDarkMode = document.body.classList.contains('dark-mode'); const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'; const textColor = isDarkMode ? '#e0e9f5' : '#1a1a1a'; const primaryColor = isDarkMode ? '#00bfff' : '#007aff';
         if (forceReload) { if (visitorsChartInstance) visitorsChartInstance.destroy(); if (featuresChartInstance) featuresChartInstance.destroy(); visitorsChartInstance = null; featuresChartInstance = null; }
-        if (!visitorsChartInstance && document.getElementById('visitors-chart')) { const ctxVisitors = document.getElementById('visitors-chart').getContext('2d'); visitorsChartInstance = new Chart(ctxVisitors, { type: 'line', data: { labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'], datasets: [{ label: 'Pengunjung', data: [150, 230, 180, 210, 250, 300, 280], fill: true, backgroundColor: primaryColor + '33', borderColor: primaryColor, tension: 0.4, pointBackgroundColor: primaryColor, }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { color: gridColor } } } } }); }
-        if (!featuresChartInstance && document.getElementById('features-chart')) { const ctxFeatures = document.getElementById('features-chart').getContext('2d'); featuresChartInstance = new Chart(ctxFeatures, { type: 'doughnut', data: { labels: ['TikTok', 'Spotify', 'IQC', 'Lainnya'], datasets: [{ label: 'Penggunaan Fitur', data: [450, 280, 150, 50], backgroundColor: [primaryColor, '#1DB954', '#8e8e93', '#ff9500'], borderColor: 'transparent', }] }, options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: textColor } } } } }); }
+        const visitorsChartCanvas = document.getElementById('visitors-chart');
+        if (!visitorsChartInstance && visitorsChartCanvas) { const ctxVisitors = visitorsChartCanvas.getContext('2d'); visitorsChartInstance = new Chart(ctxVisitors, { type: 'line', data: { labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'], datasets: [{ label: 'Pengunjung', data: [150, 230, 180, 210, 250, 300, 280], fill: true, backgroundColor: primaryColor + '33', borderColor: primaryColor, tension: 0.4, pointBackgroundColor: primaryColor, }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { color: gridColor } } } } }); }
+        const featuresChartCanvas = document.getElementById('features-chart');
+        if (!featuresChartInstance && featuresChartCanvas) { const ctxFeatures = featuresChartCanvas.getContext('2d'); featuresChartInstance = new Chart(ctxFeatures, { type: 'doughnut', data: { labels: ['TikTok', 'Spotify', 'IQC', 'Lainnya'], datasets: [{ label: 'Penggunaan Fitur', data: [450, 280, 150, 50], backgroundColor: [primaryColor, '#1DB954', '#8e8e93', '#ff9500'], borderColor: 'transparent', }] }, options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: textColor } } } } }); }
     }
 
 });
